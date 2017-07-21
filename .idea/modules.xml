@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SHSAdminSpring.iml" filepath="$PROJECT_DIR$/SHSAdminSpring.iml" />
-      <module fileurl="file://$PROJECT_DIR$/SecurdeMP.iml" filepath="$PROJECT_DIR$/SecurdeMP.iml" />
     </modules>
   </component>
 </project>

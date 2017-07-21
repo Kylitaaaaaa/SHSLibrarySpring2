@@ -6,12 +6,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="SecurdeMP" />
         <module name="SHSAdminSpring" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="SecurdeMP" target="1.8" />
       <module name="SHSAdminSpring" target="1.8" />
     </bytecodeTargetLevel>
   </component>
