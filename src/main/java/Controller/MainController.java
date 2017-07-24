@@ -1,11 +1,14 @@
 package Controller;
 
+import com.sun.javafx.tools.packager.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Controller    // This means that this class is a Controller
 @RequestMapping(path="/demo") // This means URL's start with /demo (after hello.Application path)
@@ -42,6 +45,34 @@ public class MainController {
 	 * 3 - Prof
 	 * 4 - Student
 	 */
+
+    @GetMapping(path="/getLibMan")
+    public @ResponseBody Iterable<User> getLibMan() {
+        // This returns a JSON or XML with the users
+
+        List<User> users = new ArrayList();
+        userRepository.findAll().forEach(users::add);
+        for(int i=0; i<users.size(); i++)
+            if(users.get(i).getUser_type() != 1)
+                users.remove(i);
+
+        return users;
+    }
+
+    @GetMapping(path="/getLibStaff")
+    public @ResponseBody Iterable<User> getLibStaff() {
+        // This returns a JSON or XML with the users
+
+        List<User> users = new ArrayList();
+        userRepository.findAll().forEach(users::add);
+        for(int i=0; i<users.size(); i++)
+            if(users.get(i).getUser_type() != 2)
+                users.remove(i);
+
+        return users;
+    }
+
+
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, path="/addAdmin")
     public @ResponseBody String addNewAdmin (@RequestParam String first_name,
@@ -82,9 +113,61 @@ public class MainController {
         return "Saved";
     }
 
+    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, path="/updateAdmin")
+    public @ResponseBody String updateAdmin (@RequestParam int admin_id,
+                                             @RequestParam String first_name,
+                                             @RequestParam String middle_initial,
+                                             @RequestParam String last_name,
+                                             @RequestParam String birthday,
+                                             @RequestParam String secret_question,
+                                             @RequestParam String secret_answer) {
+
+        Admin a = adminRepository.findOne(admin_id);
+
+        a.setFirst_name(first_name);
+        a.setMiddle_initial(middle_initial);
+        a.setLast_name(last_name);
+        a.setBirthday(birthday);
+        a.setSecret_question(secret_question);
+        a.setSecret_answer(secret_answer);
+        adminRepository.save(a);
+
+        return "cru";
+    }
+
+    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, path="/unlockAccount")
+    public @ResponseBody String unlockAccount (@RequestParam int user_id) {
+
+        //0 == unlock
+        //1 == lock
+
+        User u = userRepository.findOne(user_id);
+        u.setLock_status(0);
+
+        userRepository.save(u);
+
+        return "Unlocked";
+    }
+
+    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, path="/lockAccount")
+    public @ResponseBody String lockAccount (@RequestParam int user_id) {
+
+        //0 == unlock
+        //1 == lock
+
+        User u = userRepository.findOne(user_id);
+        u.setLock_status(1);
+
+        userRepository.save(u);
+
+        return "Locked";
+    }
+
+
+
+
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, path="/addUser")
-    public @ResponseBody String addNewUser (
-                                             @RequestParam String id_number,
+    public @ResponseBody String addNewUser (@RequestParam String id_number,
                                              @RequestParam String password,
                                              @RequestParam String user_type,
                                              @RequestParam String email_address,

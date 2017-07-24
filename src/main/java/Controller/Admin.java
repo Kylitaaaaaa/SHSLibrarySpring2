@@ -10,7 +10,6 @@ import javax.persistence.Id;
  */
 @Entity
 public class Admin {
-    @GeneratedValue(strategy= GenerationType.AUTO)
     @Id
     private int admin_id;
     private String first_name;
