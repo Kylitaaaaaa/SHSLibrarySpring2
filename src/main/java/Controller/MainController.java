@@ -31,6 +31,9 @@ public class MainController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private RoomReservationRepository roomReservationRepository;
+
     @GetMapping(path="/allBook")
     public @ResponseBody Iterable<Book> getAllBook() {
         // This returns a JSON or XML with the users
@@ -47,6 +50,24 @@ public class MainController {
     public @ResponseBody Iterable<Meeting_Room> getAllMeetingRoom() {
         // This returns a JSON or XML with the users
         return meeting_roomRepository.findAll();
+    }
+
+    /*
+	 * 0 - Free
+	 * 1 - Not Free
+	 *
+	 */
+
+    @GetMapping(path="/allAvailableMeetingRoom")
+    public @ResponseBody Iterable<Meeting_Room> getAllAvailableMeetingRoom() {
+        // This returns a JSON or XML with the users
+        List<Meeting_Room> meeting_rooms = new ArrayList();
+        meeting_roomRepository.findAll().forEach(meeting_rooms::add);
+        for(int i=0; i<meeting_rooms.size(); i++)
+            if(meeting_rooms.get(i).getRoom_status() == 1)
+                meeting_rooms.remove(i);
+
+        return meeting_rooms;
     }
 
     @GetMapping(path="/allReview")
@@ -75,8 +96,21 @@ public class MainController {
 	 * 4 - Student
 	 */
 
-    @GetMapping(path="/getLibMan")
-    public @ResponseBody Iterable<User> getLibMan() {
+    @GetMapping(path="/getAdmins")
+    public @ResponseBody Iterable<User> getAdmins() {
+        // This returns a JSON or XML with the users
+
+        List<User> users = new ArrayList();
+        userRepository.findAll().forEach(users::add);
+        for(int i=0; i<users.size(); i++)
+            if(users.get(i).getUser_type() != 0)
+                users.remove(i);
+
+        return users;
+    }
+
+    @GetMapping(path="/getLibMans")
+    public @ResponseBody Iterable<User> getLibMans() {
         // This returns a JSON or XML with the users
 
         List<User> users = new ArrayList();
@@ -88,8 +122,8 @@ public class MainController {
         return users;
     }
 
-    @GetMapping(path="/getLibStaff")
-    public @ResponseBody Iterable<User> getLibStaff() {
+    @GetMapping(path="/getLibStaffs")
+    public @ResponseBody Iterable<User> getLibStaffs() {
         // This returns a JSON or XML with the users
 
         List<User> users = new ArrayList();
@@ -100,6 +134,40 @@ public class MainController {
 
         return users;
     }
+
+    @GetMapping(path="/getFaculties")
+    public @ResponseBody Iterable<User> getFaculties() {
+        // This returns a JSON or XML with the users
+
+        List<User> users = new ArrayList();
+        userRepository.findAll().forEach(users::add);
+        for(int i=0; i<users.size(); i++)
+            if(users.get(i).getUser_type() != 3)
+                users.remove(i);
+
+        return users;
+    }
+
+    @GetMapping(path="/getStudents")
+    public @ResponseBody Iterable<User> getStudents() {
+        // This returns a JSON or XML with the users
+
+        List<User> users = new ArrayList();
+        userRepository.findAll().forEach(users::add);
+        for(int i=0; i<users.size(); i++)
+            if(users.get(i).getUser_type() != 4)
+                users.remove(i);
+
+        return users;
+    }
+
+    @GetMapping (path="/getSpecificUser")
+    public @ResponseBody User getUser(@RequestParam int user_id){
+        User user = userRepository.findOne(user_id);
+        return user;
+    }
+
+
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, path="/addCustomer")
     public @ResponseBody String addNewCustomer (@RequestParam String first_name,
@@ -204,7 +272,7 @@ public class MainController {
         return "Book Saved";
     }
 
-    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, path="/updateAdmin")
+    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, path="/updateCustomer")
     public @ResponseBody String updateCustomer (@RequestParam int customer_id,
                                              @RequestParam String first_name,
                                              @RequestParam String middle_initial,
@@ -226,7 +294,7 @@ public class MainController {
         return "cru";
     }
 
-    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, path="/updateAdmin")
+    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, path="/updateUser")
     public @ResponseBody String updateUser (@RequestParam int user_id,
                                                 @RequestParam int id_number,
                                                 @RequestParam String password,
@@ -331,6 +399,35 @@ public class MainController {
 
         return "Locked";
     }
+
+    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, path="/reserveRoom")
+    public @ResponseBody String reserveRoom (@RequestParam String reservation_date,
+                                             @RequestParam String usage_date,
+                                             @RequestParam String start_time,
+                                             @RequestParam String end_time,
+                                             @RequestParam int user_id,
+                                             @RequestParam int meeting_room_id) {
+
+        RoomReservation roomReservation = new RoomReservation();
+        roomReservation.setReservation_date(reservation_date);
+        roomReservation.setUsage_date(usage_date);
+        roomReservation.setStart_time(start_time);
+        roomReservation.setEnd_time(end_time);
+        roomReservation.setUser_id(user_id);
+        roomReservation.setMeeting_room_id(meeting_room_id);
+
+        //Meeting_Room meeting_room = meeting_roomRepository.findOne(roomReservation.getMeeting_room_id());
+
+        //meeting_room.setRoom_status(1);
+
+        //meeting_roomRepository.save(meeting_room);
+
+        roomReservationRepository.save(roomReservation);
+
+        return "Reserved";
+    }
+
+
 
 
 

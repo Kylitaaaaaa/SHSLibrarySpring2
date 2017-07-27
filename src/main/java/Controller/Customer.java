@@ -2,12 +2,14 @@ package Controller;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Created by Thea on 19/07/2017.
  */
 
 @Entity
+//@Table()
 public class Customer {
 
     @Id
