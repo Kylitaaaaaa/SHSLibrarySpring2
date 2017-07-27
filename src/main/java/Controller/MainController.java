@@ -168,6 +168,63 @@ public class MainController {
     }
 
 
+    @GetMapping(path="/SearchAll")
+    public @ResponseBody Iterable<Book> getBookByAll(String key) {
+        // This returns a JSON or XML with the users
+
+        List<Book> books = new ArrayList();
+        bookRepository.findAll().forEach(
+                book->{
+                    if(book.getAuthor().contains(key)||book.getTitle().contains(key)||book.getPublisher().contains(key)){
+                        books.add(book);
+                    }
+                });
+        return books;
+    }
+    @GetMapping(path="/SearchAuthor")
+    public @ResponseBody Iterable<Book> getBookByAuthor(String key) {
+        // This returns a JSON or XML with the users
+
+        List<Book> books = new ArrayList();
+        bookRepository.findAll().forEach(
+                book->{
+                    if(book.getAuthor().contains(key)){
+                        books.add(book);
+                    }
+                });
+        return books;
+    }
+
+    @GetMapping(path="/SearchTitle")
+    public @ResponseBody Iterable<Book> getBookByTitle(String key) {
+        // This returns a JSON or XML with the users
+
+        List<Book> books = new ArrayList();
+        bookRepository.findAll().forEach(
+                book->{
+                    if(book.getTitle().contains(key)){
+                        books.add(book);
+                    }
+                });
+        return books;
+    }
+
+    @GetMapping(path="/SearchPublisher")
+    public @ResponseBody Iterable<Book> getBookByPublisher(String key) {
+        // This returns a JSON or XML with the users
+
+        List<Book> books = new ArrayList();
+        bookRepository.findAll().forEach(
+                book->{
+                    if(book.getPublisher().contains(key)){
+                        books.add(book);
+                    }
+                });
+        return books;
+    }
+
+
+
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, path="/addCustomer")
     public @ResponseBody String addNewCustomer (@RequestParam String first_name,
