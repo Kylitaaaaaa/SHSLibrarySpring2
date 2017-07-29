@@ -1,6 +1,5 @@
 package Controller;
 
-import com.sun.javafx.tools.packager.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -175,7 +174,9 @@ public class MainController {
         List<Book> books = new ArrayList();
         bookRepository.findAll().forEach(
                 book->{
-                    if(book.getAuthor().contains(key)||book.getTitle().contains(key)||book.getPublisher().contains(key)){
+                    if(book.getAuthor().toLowerCase().contains(key.toLowerCase())
+                            ||book.getTitle().toLowerCase().contains(key.toLowerCase())
+                            ||book.getPublisher().toLowerCase().contains(key.toLowerCase())){
                         books.add(book);
                     }
                 });
@@ -188,7 +189,7 @@ public class MainController {
         List<Book> books = new ArrayList();
         bookRepository.findAll().forEach(
                 book->{
-                    if(book.getAuthor().contains(key)){
+                    if(book.getAuthor().toLowerCase().contains(key.toLowerCase())){
                         books.add(book);
                     }
                 });
@@ -202,7 +203,7 @@ public class MainController {
         List<Book> books = new ArrayList();
         bookRepository.findAll().forEach(
                 book->{
-                    if(book.getTitle().contains(key)){
+                    if(book.getTitle().toLowerCase().contains(key.toLowerCase())){
                         books.add(book);
                     }
                 });
@@ -216,7 +217,7 @@ public class MainController {
         List<Book> books = new ArrayList();
         bookRepository.findAll().forEach(
                 book->{
-                    if(book.getPublisher().contains(key)){
+                    if(book.getPublisher().toLowerCase().contains(key.toLowerCase())){
                         books.add(book);
                     }
                 });
