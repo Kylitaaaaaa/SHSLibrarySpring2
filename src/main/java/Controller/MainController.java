@@ -167,7 +167,7 @@ public class MainController {
     }
 
 
-    @GetMapping(path="/SearchAll")
+    @GetMapping(path="/searchAll")
     public @ResponseBody Iterable<Book> getBookByAll(String key) {
         // This returns a JSON or XML with the users
 
@@ -182,7 +182,7 @@ public class MainController {
                 });
         return books;
     }
-    @GetMapping(path="/SearchAuthor")
+    @GetMapping(path="/searchAuthor")
     public @ResponseBody Iterable<Book> getBookByAuthor(String key) {
         // This returns a JSON or XML with the users
 
@@ -196,7 +196,7 @@ public class MainController {
         return books;
     }
 
-    @GetMapping(path="/SearchTitle")
+    @GetMapping(path="/searchTitle")
     public @ResponseBody Iterable<Book> getBookByTitle(String key) {
         // This returns a JSON or XML with the users
 
@@ -210,7 +210,7 @@ public class MainController {
         return books;
     }
 
-    @GetMapping(path="/SearchPublisher")
+    @GetMapping(path="/searchPublisher")
     public @ResponseBody Iterable<Book> getBookByPublisher(String key) {
         // This returns a JSON or XML with the users
 
