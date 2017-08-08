@@ -3,36 +3,90 @@ package com.securde.shslibrary.model;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+
 /**
  * Created by Thea on 19/07/2017.
  */
 
 @Entity
-public class User {
+public class User{
     @Id
-    private int user_id;
-    private int id_number;
+    private int userid;
+    private int usertype;
+
+    private int idnumber;
     private String password;
-    private int user_type;
-    private String email_address;
-    private String phone_number;
-    private int lock_status;
-    private int login_attempts;
+    private String emailaddress;
+    private String phonenumber;
+    private int lockstatus;
+    private int loginattempts;
+    private String firstname;
+    private String lastname;
+    private String middleinitial;
+    private String birthday;
+    private String secretquestion;
+    private String secretanswer;
 
-    public int getUser_id() {
-        return user_id;
+//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    @JoinTable(name = "userrole", joinColumns = @JoinColumn(name = "userid"), inverseJoinColumns = @JoinColumn(name = "roleid"))
+//    private Set<Role> roles;
+
+
+    public User(int userid, int usertype, int idnumber, String password, String emailaddress, String phonenumber, int lockstatus, int loginattempts, String firstname, String lastname, String middleinitial, String birthday, String secretquestion, String secretanswer) {
+        this.userid = userid;
+        this.usertype = usertype;
+        this.idnumber = idnumber;
+        this.password = password;
+        this.emailaddress = emailaddress;
+        this.phonenumber = phonenumber;
+        this.lockstatus = lockstatus;
+        this.loginattempts = loginattempts;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.middleinitial = middleinitial;
+        this.birthday = birthday;
+        this.secretquestion = secretquestion;
+        this.secretanswer = secretanswer;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public User() {
     }
 
-    public int getId_number() {
-        return id_number;
+    public User(User user) {
+        this.emailaddress = user.getEmailaddress();
+        this.phonenumber = user.getPhonenumber();
+        this.lockstatus = user.getLockstatus();
+        this.loginattempts = user.getLoginattempts();
+        this.firstname = user.getFirstname();
+        this.lastname = user.getLastname();
+        this.middleinitial = user.getMiddleinitial();
+        this.birthday = user.getBirthday();
+        this.secretquestion = user.getSecretquestion();
+        this.secretanswer = user.getSecretanswer();
     }
 
-    public void setId_number(int id_number) {
-        this.id_number = id_number;
+    public int getUserid() {
+        return userid;
+    }
+
+    public void setUserid(int userid) {
+        this.userid = userid;
+    }
+
+    public int getUsertype() {
+        return usertype;
+    }
+
+    public void setUsertype(int usertype) {
+        this.usertype = usertype;
+    }
+
+    public int getIdnumber() {
+        return idnumber;
+    }
+
+    public void setIdnumber(int idnumber) {
+        this.idnumber = idnumber;
     }
 
     public String getPassword() {
@@ -42,43 +96,94 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-    public int getUser_type() {
-        return user_type;
+
+    public String getEmailaddress() {
+        return emailaddress;
     }
 
-    public void setUser_type(int user_type) {
-        this.user_type = user_type;
+    public void setEmailaddress(String emailaddress) {
+        this.emailaddress = emailaddress;
     }
 
-    public String getEmail_address() {
-        return email_address;
+    public String getPhonenumber() {
+        return phonenumber;
     }
 
-    public void setEmail_address(String email_address) {
-        this.email_address = email_address;
+    public void setPhonenumber(String phonenumber) {
+        this.phonenumber = phonenumber;
     }
 
-    public String getPhone_number() {
-        return phone_number;
+    public int getLockstatus() {
+        return lockstatus;
     }
 
-    public void setPhone_number(String phone_number) {
-        this.phone_number = phone_number;
+    public void setLockstatus(int lockstatus) {
+        this.lockstatus = lockstatus;
     }
 
-    public int getLock_status() {
-        return lock_status;
+    public int getLoginattempts() {
+        return loginattempts;
     }
 
-    public void setLock_status(int lock_status) {
-        this.lock_status = lock_status;
+    public void setLoginattempts(int loginattempts) {
+        this.loginattempts = loginattempts;
     }
 
-    public int getLogin_attempts() {
-        return login_attempts;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setLogin_attempts(int login_attempts) {
-        this.login_attempts = login_attempts;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getMiddleinitial() {
+        return middleinitial;
+    }
+
+    public void setMiddleinitial(String middleinitial) {
+        this.middleinitial = middleinitial;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getSecretquestion() {
+        return secretquestion;
+    }
+
+    public void setSecretquestion(String secretquestion) {
+        this.secretquestion = secretquestion;
+    }
+
+    public String getSecretanswer() {
+        return secretanswer;
+    }
+
+    public void setSecretanswer(String secretanswer) {
+        this.secretanswer = secretanswer;
+    }
+
+    /*
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+    */
 }

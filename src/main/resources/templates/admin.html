@@ -1,0 +1,214 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title>Spring Boot Thymeleaf Hello World Example</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+
+
+
+    <link rel="stylesheet" href="../../css/bootstrap.css" th:href="@{/css/bootstrap.css}"/>
+    <link rel="stylesheet" href="../../css/main.css" th:href="@{/css/main.css}"/>
+    <script type="text/javascript" src="/static/js/angular.js" th:src="@{/js/angular.js}"></script>
+    <script type="text/javascript" src="/static/js/jquery-3.2.1.js" th:src="@{/js/jquery-3.2.1.js}"></script>
+    <script type="text/javascript" src="/static/js/bootstrap.js" th:src="@{/js/bootstrap.js}"></script>
+    <script type="text/javascript" src="/static/app/app.module.js" th:src="@{/app/app.module.js}"></script>
+    <script type="text/javascript" src="/static/app/user.controller.js" th:src="@{/app/user.controller.js}"></script>
+
+    <script type="text/javascript" src="/static/js/angular-animate.js" th:src="@{/js/angular-animate.js}"></script>
+    <script type="text/javascript" src="/static/js/toaster.js" th:src="@{/js/toaster.js}"></script>
+    <link rel="stylesheet" href="../../css/toaster.css" th:href="@{/css/toaster.css}"/>
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular-sanitize.js"></script>
+
+
+</head>
+<body ng-app="app" ng-controller="GenController as vm">
+
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet"/>
+<div  class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="nav-side-menu">
+                <div class="brand" th:text="Admin">Admin</div>
+                <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
+                <div class="menu-list">
+                    <ul id="menu-content" class="menu-content collapse out">
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-dashboard fa-lg" ng-click="vm.getAllMan()"></i> Library Manager
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-dashboard fa-lg" ng-click="vm.getAllStaff()"></i> Library Staff
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-dashboard fa-lg" ng-click="vm.getAllStudent()"></i> Student
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-dashboard fa-lg" ng-click="vm.getAllProf()"></i> Professor
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#newUserFormModal">
+                                <i class="fa fa-dashboard fa-lg"></i> Add User
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-dashboard fa-lg"></i> Log Out
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <main class="container pt-5">
+                <h1 class="card mb-5"> Accounts </h1>
+                <div class="card-block p-0">
+                    <table class="table table-bordered table-definition mb-5">
+                        <thead class="table-warning ">
+                        <tr>
+                            <th></th>
+                            <th>Login Attempts</th>
+                            <th>Name</th>
+                            <th>E-mail address</th>
+                            <th>Mobile Number</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="user in vm.users">
+                            <td>
+                                <div ng-if = "user.lockstatus == 0">
+
+                                </div>
+                                <div  ng-if = "user.lockstatus != 0">
+                                    <button type="button" class="btn btn-primary btn-block"  ng-click="vm.unlockUser(user.userid)">Unlock</button>
+                                </div>
+
+                            </td>
+                            <td>
+                            <b>{{user.loginattempts}}</b>:
+                            <span ng-bind-html="user.loginattempts" class="htmlComment"></span>
+                            </td>
+                            <td ng-bind="(user.firstname) + (user.middleinitial) + (user.lastname)"></td>
+                            <td ng-bind="user.emailaddress"></td>
+                            <td ng-bind="user.phonenumber"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+    </div>
+</div>
+<!-- /.container -->
+
+<!-- line modal -->
+<div class="modal fade" id="newUserFormModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <h3 class="modal-title" id="lineModalLabel">Add User</h3>
+            </div>
+            <div class="modal-body">
+
+                <!-- content goes here -->
+                <form method="post" ng-submit="onSubmit(newUserForm.$valid)"
+                      name = "newUserForm">
+                    <div class="form-group">
+                        <label for="selectUser">User Type</label>
+                        <select class="form-control" id = "selectUser" ng-model="formModel.usertype" required="required">
+                            <option value="1">Library Manager</option>
+                            <option value="2">Library Staff</option>
+                            <option value="3">Professor</option>
+                            <option value="4">Student</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="idnumber">ID Number</label>
+                        <input type="number" class="form-control" id="idnumber" placeholder="Enter ID Number" ng-model="formModel.idnumber" autocomplete="off" required="required" name = "idnumber"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="firsname">First Name</label>
+                        <input type="text" class="form-control" id="firsname" placeholder="Enter first name" ng-model="formModel.firstname" autocomplete="off" required="required" name = "firstname"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="middleinitial">Middle Initial</label>
+                        <input type="text" class="form-control" id="middleinitial" placeholder="Enter middle initial" ng-model="formModel.middleinitial" autocomplete="off" required="required" name = "middleinitial"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastname">Last Name</label>
+                        <input type="text" class="form-control" id="lastname" placeholder="Enter last name" ng-model="formModel.lastname" autocomplete="off" required="required" name = "lastname"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="birthday">Birthday</label>
+                        <input type="text" class="form-control" id="birthday" placeholder="Enter birthday" ng-model="formModel.birthday" autocomplete="off" required="required" name = "birthday"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="Enter email" ng-model="formModel.emailaddress" autocomplete="off" required="required" name = "email"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="phonenumber">Phone Number</label>
+                        <input type="text" class="form-control" id="phonenumber" placeholder="Enter phone number" ng-model="formModel.phonenumber" autocomplete="off" required="required" name = "phonenumber"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="secretquestion">Secret Question</label>
+                        <input type="text" class="form-control" id="secretquestion" placeholder="Enter secret question" ng-model="formModel.secretquestion" autocomplete="off" required="required" name = "secretquestion"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="secretanswer">Secret Answer</label>
+                        <input type="password" class="form-control" id="secretanswer" placeholder="Enter secret answer" ng-model="formModel.secretanswer" autocomplete="off" required="required" name = "secretanswer"/>
+                    </div>
+
+                    <button type="submit" id="submitAddNewUser" class="btn btn-primary">Submit</button>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".btn-select").each(function (e) {
+            var value = $(this).find("ul li.selected").html();
+            if (value != undefined) {
+                $(this).find(".btn-select-input").val(value);
+                $(this).find(".btn-select-value").html(value);
+            }
+        });
+        $("#submitAddNewUser").on("click", function() {
+            /* var em = "Scared";
+             $("#hiddeninput").val(em); */
+            console.log("here at click");
+
+        });
+
+        $(".btn").on("click", function() {
+            /* var em = "Scared";
+             $("#hiddeninput").val(em); */
+            console.log("here at click");
+
+        });
+
+    });
+
+
+</script>
+
+</body>
+</html>

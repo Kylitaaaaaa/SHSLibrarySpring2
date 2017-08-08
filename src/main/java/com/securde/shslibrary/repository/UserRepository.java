@@ -1,11 +1,13 @@
 package com.securde.shslibrary.repository;
 
 import com.securde.shslibrary.model.User;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-// This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository
-// CRUD refers Create, Read, Update, Delete
+import java.util.List;
 
-public interface UserRepository extends CrudRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<User, Integer> {
+    List<User> findUserByUsertypeLike(int type);
+    List<User> findUserByUseridLike(int uid);
+    User findUserByIdnumberLike(int idnumber);
 
 }
