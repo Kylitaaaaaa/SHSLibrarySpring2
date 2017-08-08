@@ -14,14 +14,14 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-        super.configure(resources);
+        resources.resourceId(AuthorizationServerConfig.RESOURCE_ID);
     }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/","/home","/register","/login").permitAll()
-                .antMatchers("/private/**","/k").authenticated();
+                .antMatchers("/private/**","/libstaff/**").authenticated();
     }
 
 
