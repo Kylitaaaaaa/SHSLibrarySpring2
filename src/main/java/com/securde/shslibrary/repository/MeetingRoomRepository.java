@@ -11,4 +11,5 @@ import java.util.List;
 
 public interface MeetingRoomRepository extends JpaRepository<Meetingroom, Integer> {
     List<Meetingroom> findMeetingroomByRoomstatusLike(int status);
+    Meetingroom findMeetingroomByMeetingroomidLike(int mrid);
 }

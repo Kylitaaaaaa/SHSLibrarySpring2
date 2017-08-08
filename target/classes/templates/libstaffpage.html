@@ -76,9 +76,9 @@
                                     Delete
                                 </button>
                             </td>
-                            <td>{{resources.bookid}}</td>
-                            <td>{{resources.title}}</td>
-                            <td>{{resources.author}}</td>
+                            <td ng-bind="resources.bookid"/>
+                            <td ng-bind="resources.title"/>
+                            <td ng-bind="resources.author"/>
                         </tr>
                         </tbody>
                     </table>
@@ -97,8 +97,8 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="mr in vm.mr">
-                            <td>{{mr.meetingroomid}}</td>
-                            <td>{{mr.roomname}}</td>
+                            <td ng-bind="mr.meetingroomid"/>
+                            <td ng-bind="mr.roomname"/>
                         </tr>
                         </tbody>
                     </table>

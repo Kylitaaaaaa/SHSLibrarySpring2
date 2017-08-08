@@ -6,10 +6,6 @@
 <head>
     <title>Spring Boot Thymeleaf Hello World Example</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-
-
-
-
     <link rel="stylesheet" href="../../css/bootstrap.css" th:href="@{/css/bootstrap.css}"/>
     <link rel="stylesheet" href="../../css/main.css" th:href="@{/css/main.css}"/>
     <script type="text/javascript" src="/static/js/angular.js" th:src="@{/js/angular.js}"></script>
@@ -96,13 +92,10 @@
                                 </div>
 
                             </td>
-                            <td>
-                            <b>{{user.loginattempts}}</b>:
-                            <span ng-bind-html="user.loginattempts" class="htmlComment"></span>
-                            </td>
-                            <td ng-bind="(user.firstname) + (user.middleinitial) + (user.lastname)"></td>
-                            <td ng-bind="user.emailaddress"></td>
-                            <td ng-bind="user.phonenumber"></td>
+                            <td ng-bind="user.loginattempts"/>
+                            <td> <span ng-bind="user.firstname"> </span> <span ng-bind="user.middleinitial"> .</span> <span ng-bind="user.lastname"> </span></td>
+                            <td ng-bind="user.emailaddress"/>
+                            <td ng-bind="user.phonenumber"/>
                         </tr>
                         </tbody>
                     </table>
@@ -190,19 +183,6 @@
                 $(this).find(".btn-select-input").val(value);
                 $(this).find(".btn-select-value").html(value);
             }
-        });
-        $("#submitAddNewUser").on("click", function() {
-            /* var em = "Scared";
-             $("#hiddeninput").val(em); */
-            console.log("here at click");
-
-        });
-
-        $(".btn").on("click", function() {
-            /* var em = "Scared";
-             $("#hiddeninput").val(em); */
-            console.log("here at click");
-
         });
 
     });

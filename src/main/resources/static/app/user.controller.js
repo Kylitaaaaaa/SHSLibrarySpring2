@@ -90,7 +90,6 @@
         }
 
         function unlockUser(resid) {
-            alert('here ' + resid);
             var url = "/gen/unlockUser/" + resid;
             var adminsPromise = $http.get(url);
             $http.post(url).then(function (response) {
