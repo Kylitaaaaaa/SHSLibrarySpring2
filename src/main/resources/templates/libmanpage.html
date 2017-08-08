@@ -81,9 +81,9 @@
                                     Delete
                                 </button>
                             </td>
-                            <td>{{resources.bookid}}</td>
-                            <td>{{resources.title}}</td>
-                            <td>{{resources.author}}</td>
+                            <td ng-bind="resources.bookid"/>
+                            <td ng-bind="resources.title"/>
+                            <td ng-bind="resources.author"/>
                         </tr>
                         </tbody>
                     </table>
@@ -113,10 +113,10 @@
                                     Delete
                                 </button>
                             </td>
-                            <td>{{resourceRes.status}}</td>
-                            <td>{{resourceRes.returndate}}</td>
-                            <td>{{resourceRes.bookid}}</td>
-                            <td>{{resourceRes.userid}}</td>
+                            <td ng-bind="resourceRes.status"/>
+                            <td ng-bind="resourceRes.returndate"/>
+                            <td ng-bind="resourceRes.bookid"/>
+                            <td ng-bind="resourceRes.userid"/>
                         </tr>
                         </tbody>
                     </table>
@@ -147,10 +147,10 @@
                                     Delete
                                 </button>
                             </td>
-                            <td>{{mrRes.mrid}}</td>
-                            <td>{{mrRes.userid}}</td>
-                            <td>{{mrRes.usagedate}}</td>
-                            <td>{{mrRes.starttime}} - {{mrRes.endtime}}</td>
+                            <td ng-bind="mrRes.mrid"/>
+                            <td ng-bind="mrRes.userid"/>
+                            <td ng-bind="mrRes.usagedate"/>
+                            <td> <span ng-bind="mrRes.starttime"> - </span> <span ng-bind="mrRes.endtime"/> </td>
                         </tr>
                         </tbody>
                     </table>
