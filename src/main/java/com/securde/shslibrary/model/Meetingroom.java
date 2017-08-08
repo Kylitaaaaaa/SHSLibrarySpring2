@@ -13,7 +13,7 @@ public class Meetingroom {
 	/*
 	 * 0 - Free
 	 * 1 - Not Free
-	 *
+	 * 2 - Reserved
 	 */
 
     @Id

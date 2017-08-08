@@ -18,6 +18,13 @@ public class Resourcereservation {
     private String borrowdate;
     private String returndate;
 
+    /*
+    status
+    0 - returned
+    1 - not returned
+    2- reserved
+     */
+
     public Resourcereservation() {
     }
 

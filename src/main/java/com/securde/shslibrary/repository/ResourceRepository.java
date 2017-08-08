@@ -8,5 +8,9 @@ import java.util.List;
 public interface ResourceRepository extends JpaRepository<Resource, Integer> {
     //List<User> findUserByUsertypeLike(int type);
     List<Resource> findResourceByStatusLike(int stat);
+    List<Resource> findResourceByAuthorLike(String author);
+    List<Resource> findResourceByTitleLike(String title);
+    List<Resource> findResourceByPublisherLike(String publisher);
+    Resource findResourceByBookidLike(int uid);
 
 }

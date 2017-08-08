@@ -9,50 +9,61 @@ import javax.persistence.Id;
 @Entity
 public class Review {
     @Id
-    private int review_id;
+    private int reviewid;
 
-    private String review_content;
-    private int book_id;
-    private int user_id;
-    private String review_date;
+    private String reviewcontent;
+    private int bookid;
+    private int userid;
+    private String reviewdate;
 
-    public int getReview_id() {
-        return review_id;
+    public Review() {
     }
 
-    public void setReview_id(int review_id) {
-        this.review_id = review_id;
+    public Review(int reviewid, String reviewcontent, int bookid, int userid, String reviewdate) {
+        this.reviewid = reviewid;
+        this.reviewcontent = reviewcontent;
+        this.bookid = bookid;
+        this.userid = userid;
+        this.reviewdate = reviewdate;
     }
 
-    public int getBook_id() {
-        return book_id;
+    public int getReviewid() {
+        return reviewid;
     }
 
-    public void setBook_id(int book_id) {
-        this.book_id = book_id;
+    public void setReviewid(int reviewid) {
+        this.reviewid = reviewid;
     }
 
-    public String getReview_content() {
-        return review_content;
+    public String getReviewcontent() {
+        return reviewcontent;
     }
 
-    public void setReview_content(String review_content) {
-        this.review_content = review_content;
+    public void setReviewcontent(String reviewcontent) {
+        this.reviewcontent = reviewcontent;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public int getBookid() {
+        return bookid;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setBookid(int bookid) {
+        this.bookid = bookid;
     }
 
-    public String getReview_date() {
-        return review_date;
+    public int getUserid() {
+        return userid;
     }
 
-    public void setReview_date(String review_date) {
-        this.review_date = review_date;
+    public void setUserid(int userid) {
+        this.userid = userid;
+    }
+
+    public String getReviewdate() {
+        return reviewdate;
+    }
+
+    public void setReviewdate(String reviewdate) {
+        this.reviewdate = reviewdate;
     }
 }
