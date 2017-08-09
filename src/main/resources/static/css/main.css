@@ -250,6 +250,6 @@ html {
     border-right: 0;
 }
 
-#availRoomTable, #libmanRoomResTable, #libmanResourceResTable{
+#availRoomTable, #libmanRoomResTable, #libmanResourceResTable, #mrTable{
     display: none;
 }

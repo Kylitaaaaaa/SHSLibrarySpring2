@@ -2,6 +2,12 @@
     'use strict:';
     angular
         .module('app', ['toaster', 'ngAnimate'])
+
+        .factory('$exceptionHandler', ['$injector', function($injector) {
+            return function(exception, cause) {
+                window.location.href = '/dashboard';
+            };
+        }])
         .controller('GenController', GenController);
 
     GenController.$inject = ['$scope','$http'];

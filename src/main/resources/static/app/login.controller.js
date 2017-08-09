@@ -2,6 +2,11 @@
     'use strict:';
     angular
         .module('app', [])
+        .factory('$exceptionHandler', ['$injector', function($injector) {
+            return function(exception, cause) {
+                window.location.href = '/dashboard';
+            };
+        }])
         .controller('LogInController', LogInController);
 
 

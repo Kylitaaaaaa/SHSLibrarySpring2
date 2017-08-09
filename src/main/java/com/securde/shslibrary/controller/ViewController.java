@@ -33,4 +33,9 @@ public class ViewController {
     public String libstaff(Model model){
         return "libstaffpage";
     }
+
+    @RequestMapping("/customer")
+    public String customer(Model model){
+        return "customer";
+    }
 }

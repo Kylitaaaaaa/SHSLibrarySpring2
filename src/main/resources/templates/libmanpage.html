@@ -216,8 +216,14 @@
 
                     <div class="form-group">
                         <label for="edit_author">Usage Date</label>
-                        <input type="text" class="form-control" id="edit_room_res_usagedate" placeholder="Enter Usage date" ng-model="formModel.usagedate"/>
+                        <input type="date" id="exampleInput" name="input" ng-model="formModel.usagedate"
+                               placeholder="yyyy-MM-dd" min="2013-01-01" max="2020-12-31" required="required"/>
+
+
+
                     </div>
+
+
 
                     <div class="form-group">
                         <label for="edit_author">Start Time</label>

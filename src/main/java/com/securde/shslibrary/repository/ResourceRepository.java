@@ -12,5 +12,9 @@ public interface ResourceRepository extends JpaRepository<Resource, Integer> {
     List<Resource> findResourceByTitleLike(String title);
     List<Resource> findResourceByPublisherLike(String publisher);
     Resource findResourceByBookidLike(int uid);
+    List<Resource> findResourceByAuthorAndBooktype(String searchitem, int restype);
+    List<Resource> findResourceByPublisherAndBooktype(String searchitem, int restype);
+    List<Resource> findResourceByTitleAndBooktype(String searchitem, int restype);
+    List<Resource> findResourceByAuthorOrPublisherOrTitle(String searchitem, String searchitem2, String searchitem3);
 
 }
