@@ -25,28 +25,10 @@ public class CustomerController {
     @Autowired
     MeetingRoomRepository meetingRoomRepository;
 
-    /*
-    //idk how benson ikaw na dito
-    @GetMapping(path="/SearchAll")
-    public @ResponseBody Iterable<Resource> getBookByAll(String key) {
-        // This returns a JSON or XML with the users
-
-        List<Book> books = new ArrayList();
-        bookRepository.findAll().forEach(
-                book->{
-                    if(book.getAuthor().contains(key)||book.getTitle().contains(key)||book.getPublisher().contains(key)){
-                        books.add(book);
-                    }
-                });
-        return books;
-    }
-    */
     @RequestMapping(value = "/onSearchResources/{restype}/{options}/{searchitem}", method = RequestMethod.GET)
     public @ResponseBody Iterable <Resource> onSearchResources(@PathParam(value = "restype") @PathVariable int restype,
                                                             @PathParam(value = "options") @PathVariable int options,
                                                             @PathParam(value = "searchitem") @PathVariable String searchitem) {
-
-
         if(restype == 0){
             if(options == 0) {
                 String searchitem2 = searchitem;
@@ -104,19 +86,26 @@ public class CustomerController {
         return resourceRepository.findResourceByPublisherLike(publisher);
     }
 
-    @RequestMapping(value = "/reserveResourceRes", method = RequestMethod.POST)
-    public void reserveResourceRes(@RequestBody Resourcereservation resourcereservation){
-        resourceReservationRepository.save(resourcereservation);
-
-        Resource r = resourceRepository.findResourceByBookidLike(resourcereservation.getBookid());
-        r.setStatus(2);
-
-        resourceRepository.save(r);
-    }
-
     @RequestMapping(value = "/saveReview", method = RequestMethod.POST)
     public void saveReview(@RequestBody Review review){
         reviewRepository.save(review);
+    }
+
+    @RequestMapping(value = "/reserveResource/{bookid}/{reservationdate}/{returndate}/{status}/{userid}", method = RequestMethod.POST)
+    public void reserveResource(@PathParam(value = "bookid") @PathVariable int bookid,
+                                @PathParam(value = "reservationdate") @PathVariable String reservationdate,
+                                @PathParam(value = "returndate") @PathVariable String returndate,
+                                @PathParam(value = "status") @PathVariable int status,
+                                @PathParam(value = "userid") @PathVariable int userid) {
+
+        Resourcereservation r = new Resourcereservation();
+        r.setBookid(bookid);
+        r.setReservationdate(reservationdate);
+        r.setReturndate(returndate);
+        r.setStatus(status);
+        r.setUserid(userid);
+
+        resourceReservationRepository.save(r);
     }
 
     @RequestMapping(value = "/allAvailMR", method = RequestMethod.GET)

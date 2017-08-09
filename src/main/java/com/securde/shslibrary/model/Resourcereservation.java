@@ -20,9 +20,8 @@ public class Resourcereservation {
 
     /*
     status
-    0 - returned
-    1 - not returned
-    2- reserved
+    0 - reserved
+    1- available
      */
 
     public Resourcereservation() {

@@ -96,7 +96,7 @@
                         <tr ng-repeat="resources in vm.resources">
                             <td>
                                 <div  ng-if = "resources.status == 0">
-                                    <button type="button" class="btn btn-primary btn-block" ng-click="vm.getCurrResource(mrRes.mrresid)" data-toggle="modal" data-target="#reserveResourceModal">Reserve</button>
+                                    <button type="button" class="btn btn-primary btn-block" ng-click="vm.reserveResource(resources.bookid)">Reserve</button>
                                 </div>
                             </td>
                             <td ng-bind="resources.booktype"/>
@@ -138,60 +138,6 @@
     </div>
 </div>
 <!-- /.container -->
-
-
-<!-- line modal -->
-<div class="modal fade" id="reserveResourceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-                <h3 class="modal-title" id="lineModalLabel">Edit Resource</h3>
-            </div>
-            <div class="modal-body">
-
-                <!-- content goes here -->
-                <form method="post" ng-submit="onCreateRes(newResForm.$valid)"
-                      name = "newResForm">
-                    <div class="form-group">
-                        <label for="selectResource">Resource Type</label>
-                        <select class="form-control" id = "selectResource" ng-model="formModel.booktype">
-                            <option value="1">Book</option>
-                            <option value="2">Magazine</option>
-                            <option value="3">Thesis</option>
-                        </select>
-                    </div>
-
-
-                    <div class="form-group">
-                        <label for="edit_author">Author</label>
-                        <input type="text" class="form-control" id="edit_author" placeholder="Enter Author" autocomplete="off" ng-model="formModel.author"/>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit_loc">Location</label>
-                        <input type="text" class="form-control" id="edit_loc" placeholder="Enter Location" autocomplete="off" ng-model="formModel.location" />
-                    </div>
-                    <div class="form-group">
-                        <label for="edit_publisher">Publisher</label>
-                        <input type="text" class="form-control" id="edit_publisher" placeholder="Enter Publisher" autocomplete="off" ng-model="formModel.publisher" />
-                    </div>
-                    <div class="form-group">
-                        <label for="edit_title">Title</label>
-                        <input type="text" class="form-control" id="edit_title" placeholder="Enter Title" autocomplete="off" ng-model="formModel.title" />
-                    </div>
-                    <div class="form-group">
-                        <label for="edit_year">Year</label>
-                        <input type="number" class="form-control" id="edit_year" placeholder="Enter Year" autocomplete="off" ng-model="formModel.year" />
-                    </div>
-
-                    <button type="submit" id="submitEditResource" class="btn btn-primary">Submit</button>
-                </form>
-
-            </div>
-        </div>
-    </div>
-</div>
-
 
 
 <script>

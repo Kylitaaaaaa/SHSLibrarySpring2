@@ -2,21 +2,22 @@
     'use strict:';
     angular
         .module('app', ['toaster', 'ngAnimate'])
-        .factory('$exceptionHandler', ['$injector', function($injector) {
-            return function(exception, cause) {
-                window.location.href = '/dashboard';
-            };
-        }])
+        // .factory('$exceptionHandler', ['$injector', function($injector) {
+        //     return function(exception, cause) {
+        //         window.location.href = '/dashboard';
+        //     };
+        // }])
         .controller('CustomerController', CustomerController);
 
-    CustomerController.$inject = ['$scope','$http'];
-    function CustomerController($scope, $http) {
+    CustomerController.$inject = ['$scope','$http', '$filter'];
+    function CustomerController($scope, $http, $filter) {
         var vm = this;
         vm.resources = [];
         vm.mr = [];
         vm.getAllResources = getAllResources;
         vm.allAvailMR = allAvailMR;
         vm.getCurrResource = getCurrResource;
+        vm.reserveResource = reserveResource;
         vm.currResource = null;
 
         $scope.formModel= {};
@@ -32,24 +33,6 @@
             else{
                 console.log(":( not valid");
             }
-        }
-
-
-        $scope.reserveResourceRes = function(valid){
-            if(valid){
-                var url = "/customer/reserveResourceRes";
-                $scope.formModel.redate = $filter("date")(Date.now(), 'yyyy-MM-dd');
-                $http.post(url, $scope.formModel)
-                    .then(function success(response) {
-                        console.log("success");
-                    }, function error(response) {
-                        console.log("fail");
-                    });
-            }
-            else{
-                console.log(":( not valid");
-            }
-
         }
 
         $scope.saveReview = function(valid){
@@ -85,7 +68,6 @@
             }
 
         }
-
         init();
 
         function init(){
@@ -111,6 +93,20 @@
         function searchByPublisher(publisher) {
             var url = "/customer/searchByPublisher/" + publisher;
             var adminsPromise = $http.get(url);
+            $http.post(url).then(function (response) {
+                vm.resources = response.data;
+            });
+        }
+
+        function reserveResource(bookid) {
+            var reservationdate = $filter("date")(Date.now(), 'yyyy-MM-dd');
+            var returndate = $filter("date")(Date.now() + 7, 'yyyy-MM-dd');
+            var status = 1;
+            var userid = 1;
+
+            var url = "/customer/reserveResource/" + bookid + "/" + reservationdate  + "/" + returndate + "/"  + status + "/" + userid;
+            console.log("url: " + url);
+            var adminsPromise = $http.post(url);
             $http.post(url).then(function (response) {
                 vm.resources = response.data;
             });
