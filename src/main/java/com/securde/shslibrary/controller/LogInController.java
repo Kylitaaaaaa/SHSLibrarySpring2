@@ -39,7 +39,12 @@ public class LogInController {
         if(u != null) {
             if (u.getLockstatus() == 0) {
                 if (u.getPassword().equals(user.getPassword()))
-                    return u;
+                    {
+                        u.setLoginattempts(0);
+                        userRepository.save(u);
+                        return u;
+                    }
+
                 else {
                     u.setLoginattempts(u.getLoginattempts() + 1);
                     if (u.getLoginattempts() >= 3)
