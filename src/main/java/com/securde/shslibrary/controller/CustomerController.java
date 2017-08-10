@@ -114,30 +114,49 @@ public class CustomerController {
         resourceRepository.save(res);
     }
 
-    @RequestMapping(value = "/allAvailMR/{searchdate}", method = RequestMethod.GET)
-    public @ResponseBody Iterable<Meetingroomreservation> allAvailMR(@PathParam(value = "searchdate") @PathVariable String searchdate){
-        List<Meetingroomreservation> mrreslist = meetingRoomReservationRepository.findMeetingroomreservationByUsagedateLike(searchdate);
-        List <Meetingroom> mrlist = meetingRoomRepository.findAll();
-        List<Meetingroomreservation> mrreslistAvail = new ArrayList<Meetingroomreservation>();
 
-        for(int i=0; i<mrlist.size(); i++){
-            for(int j=1; j<=8; j++){
-                Meetingroomreservation mrsam = meetingRoomReservationRepository.findMeetingroomreservationByUsagedateAndTimeslotAndMrid(searchdate, j, mrlist.get(i).getMeetingroomid());
-                if(mrsam == null)
-                    mrreslistAvail.add(new Meetingroomreservation());
+    @RequestMapping(value = "/onSearchMR/{starttime}/{usagedateformat}", method = RequestMethod.GET)
+    public @ResponseBody Iterable<Meetingroom> onSearchMR(@PathParam(value = "starttime") @PathVariable int starttime,
+                                                                     @PathParam(value = "usagedateformat") @PathVariable String usagedateformat){
 
-
-            }
+        List<Meetingroom> mList = meetingRoomRepository.findAll();
+        List<Meetingroomreservation> mrList = meetingRoomReservationRepository.findMeetingroomreservationByUsagedateAndStarttime(usagedateformat, starttime);
+        List<Meetingroom> mList2 = new ArrayList<Meetingroom>();
+        for(int i=0; i<mList.size(); i++){
+            Meetingroomreservation mrrr = meetingRoomReservationRepository.findMeetingroomreservationByUsagedateAndStarttimeAndMrid(usagedateformat, starttime, mList.get(i).getMeetingroomid());
+            if(mrrr == null)
+                mList2.add(mList.get(i));
         }
+
+        return mList2;
     }
 
+    @RequestMapping(value = "/reserveMR/{meetingroomid}/{userid}/{reservationdate}/{usagedate}/{starttime}", method = RequestMethod.POST)
+    public void reserveResource(@PathParam(value = "meetingroomid") @PathVariable int meetingroomid,
+                                @PathParam(value = "userid") @PathVariable int userid,
+                                @PathParam(value = "reservationdate") @PathVariable String reservationdate,
+                                @PathParam(value = "usagedate") @PathVariable String usagedate,
+                                @PathParam(value = "starttime") @PathVariable int starttime) {
 
+        Meetingroomreservation mr = new Meetingroomreservation();
+        mr.setMrid(meetingroomid);
+        mr.setUserid(userid);
+        mr.setResdate(reservationdate);
+        mr.setUsagedate(usagedate);
+        mr.setStarttime(starttime);
+
+        meetingRoomReservationRepository.save(mr);
+
+    }
+
+    /*
     @RequestMapping(value = "/reserveMRRes", method = RequestMethod.POST)
     public void reserveMRRes(@RequestBody Meetingroomreservation meetingroomreservation){
         meetingRoomReservationRepository.save(meetingroomreservation);
 
         Meetingroom mr = meetingRoomRepository.findMeetingroomByMeetingroomidLike(meetingroomreservation.getMrid());
-        mr.setRoomstatus(2);
+        //mr.setRoomstatus(2);
         meetingRoomRepository.save(mr);
     }
+    */
 }

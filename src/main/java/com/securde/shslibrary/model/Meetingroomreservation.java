@@ -14,7 +14,7 @@ public class Meetingroomreservation {
     private int userid;
     private String resdate;
     private String usagedate;
-    private int timeslot;
+    private int starttime;
 
     public Meetingroomreservation() {
     }
@@ -59,11 +59,11 @@ public class Meetingroomreservation {
         this.usagedate = usagedate;
     }
 
-    public int getTimeslot() {
-        return timeslot;
+    public int getStarttime() {
+        return starttime;
     }
 
-    public void setTimeslot(int timeslot) {
-        this.timeslot = timeslot;
+    public void setStarttime(int starttime) {
+        this.starttime = starttime;
     }
 }

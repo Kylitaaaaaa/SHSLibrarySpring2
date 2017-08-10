@@ -10,6 +10,6 @@ import java.util.List;
 // CRUD refers Create, Read, Update, Delete
 
 public interface MeetingRoomRepository extends JpaRepository<Meetingroom, Integer> {
-    List<Meetingroom> findMeetingroomByRoomstatusLike(int status);
-    Meetingroom findMeetingroomByMeetingroomidLike(int mrid);
+    //List<Meetingroom> findMeetingroomByRoomstatusLike(int status);
+    //Meetingroom findMeetingroomByMeetingroomidLike(int mrid);
 }

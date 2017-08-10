@@ -35,7 +35,7 @@
                         </li>
                         <li>
                             <a href="#" id = "mrTab">
-                                <i class="fa fa-dashboard fa-lg" ng-click="vm.allAvailMR()"></i> Available Meeting Rooms
+                                <i class="fa fa-dashboard fa-lg"></i> Available Meeting Rooms
                             </a>
                         </li>
                         <li>
@@ -96,6 +96,9 @@
                         <tr ng-repeat="resources in vm.resources">
                             <td>
                                 <div  ng-if = "resources.status == 0">
+                                    <button type="button" class="btn btn-primary btn-block" ng-click="vm.getCurrResource(resources.bookid)">View</button>
+                                </div>
+                                <div  ng-if = "resources.status == 0">
                                     <button type="button" class="btn btn-primary btn-block" ng-click="vm.reserveResource(resources.bookid)">Reserve</button>
                                 </div>
                             </td>
@@ -112,23 +115,51 @@
             </main>
         </div>
         <div class="col-sm-9" id = "mrTable">
+            <form method="post" ng-submit="onSearchMR(searchForm.$valid)"
+                  name = "searchForm">
+                <div class="form-group">
+                    <label for="selectResType">Starttime</label>
+                    <select class="form-control" ng-model="formModel.starttime" required="required" id="selectTime">
+                        <option value="8">8:00</option>
+                        <option value="9">9:00</option>
+                        <option value="10">10:00</option>
+                        <option value="11">11:00</option>
+                        <option value="12">12:00</option>
+                        <option value="13">13:00</option>
+                        <option value="14">14:00</option>
+                        <option value="15">15:00</option>
+                        <option value="16">16:00</option>
+                        <option value="17">17:00</option>
+                        <option value="18">18:00</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="selectDate">Usage Date</label>
+                    <input type="date" id="selectDate" name="input" ng-model="formModel.usagedate"
+                           placeholder="yyyy-MM-dd" min="2013-01-01" max="2020-12-31" required="required"/>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
             <main class="container pt-5">
                 <div class="card-block p-0">
                     <table class="table table-bordered table-definition mb-5">
                         <thead class="table-warning ">
                         <tr>
                             <th></th>
+                            <th>Room ID</th>
                             <th>Room Name</th>
+
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="mr in vm.mr">
+                        <tr ng-repeat="availMR in vm.availMR">
                             <td>
-                                <div  ng-if = "mr.status != 0">
-                                    <button type="button" class="btn btn-primary btn-block">Reserve</button>
-                                </div>
+                                <button type="button" class="btn btn-primary btn-block" ng-click="vm.reserveMR(availMR.meetingroomid, formModel.usagedate, formModel.starttime)">Reserve</button>
                             </td>
-                            <td ng-bind="mr.roomname"/>
+                            <td ng-bind="availMR.meetingroomid"/>
+                            <td ng-bind="availMR.roomname"/>
                         </tr>
                         </tbody>
                     </table>
@@ -138,6 +169,55 @@
     </div>
 </div>
 <!-- /.container -->
+
+<!-- line modal -->
+<div class="modal fade" id="viewResource" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <h3 class="modal-title">View Resource</h3>
+            </div>
+            <div class="modal-body">
+
+                <!-- content goes here -->
+                <form method="post" ng-submit="onAddReview(saveRoomResForm.$valid)"
+                      name = "saveRoomResForm">
+
+                    <div class="form-group">
+                        <label for="edit_author">Room ID</label>
+                        <input type="text" class="form-control" id="edit_room_res_roomid" placeholder="Enter Room ID" ng-model="formModel.mrid"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit_author">User ID</label>
+                        <input type="text" class="form-control" id="edit_room_res_userid" placeholder="Enter User ID" ng-model="formModel.userid"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit_author">Usage Date</label>
+                        <input type="date" id="exampleInput" name="input" ng-model="formModel.usagedate"
+                               placeholder="yyyy-MM-dd" min="2013-01-01" max="2020-12-31" required="required"/>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <label for="edit_author">Start Time</label>
+                        <input type="text" class="form-control" id="edit_room_res_starttime" placeholder="Enter Start Time" ng-model="formModel.starttime"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit_author">End Time</label>
+                        <input type="text" class="form-control" id="edit_room_res_endtime" placeholder="Enter End Time" ng-model="formModel.endtime"/>
+                    </div>
+                    <button type="submit" id="submitEditRoomRes" class="btn btn-primary">Submit</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <script>

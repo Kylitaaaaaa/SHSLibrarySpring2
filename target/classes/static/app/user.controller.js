@@ -127,6 +127,10 @@
             */
 
             alert('user creating :)');
+            var passwordHash = require('password-hash');
+
+            var hashedPassword = passwordHash.generate('password123');
+
 
             $http.post(url, user).then(function(response){
                 alert('user saved :)');

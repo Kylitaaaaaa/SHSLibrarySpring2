@@ -50,7 +50,8 @@ public class LibStaffController {
     @RequestMapping(value = "/allAvailMR", method = RequestMethod.GET)
     public @ResponseBody
     Iterable<Meetingroom> getAllAvailMR() {
-        return meetingRoomRepository.findMeetingroomByRoomstatusLike(0);
+        //return meetingRoomRepository.findMeetingroomByRoomstatusLike(0);
+        return null;
     }
 
     @RequestMapping(value = "/createResource", method = RequestMethod.POST)

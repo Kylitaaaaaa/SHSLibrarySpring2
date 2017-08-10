@@ -77,7 +77,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .authorizedGrantTypes("client_credentials")
                 .scopes("resource-server-read", "resource-server-write").and()
                 .withClient("gigy").secret("secret").accessTokenValiditySeconds(expiration)
-                .scopes("read", "write").authorizedGrantTypes("password", "refresh_token").resourceIds(RESOURCE_ID);
+                .scopes("read", "write").authorizedGrantTypes("password", "refresh_token").resourceIds(RESOURCE_ID)
+                .authorities();
     }
 
     @Override

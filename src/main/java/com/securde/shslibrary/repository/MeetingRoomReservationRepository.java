@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface MeetingRoomReservationRepository extends JpaRepository<Meetingroomreservation, Integer> {
     List<Meetingroomreservation> findMeetingroomreservationByUsagedateLike(String searchdate);
-    Meetingroomreservation findMeetingroomreservationByUsagedateAndTimeslotAndMrid(String searchdate, int timeslot, int mrid);
+    List<Meetingroomreservation> findMeetingroomreservationByUsagedateAndStarttime(String usagedateformat, int starttime);
+    Meetingroomreservation findMeetingroomreservationByUsagedateAndStarttimeAndMrid(String usagedateformat, int starttime, int mrid);
 
 }

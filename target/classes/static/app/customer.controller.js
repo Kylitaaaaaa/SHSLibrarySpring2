@@ -2,22 +2,24 @@
     'use strict:';
     angular
         .module('app', ['toaster', 'ngAnimate'])
-        // .factory('$exceptionHandler', ['$injector', function($injector) {
-        //     return function(exception, cause) {
-        //         window.location.href = '/dashboard';
-        //     };
-        // }])
+        .factory('$exceptionHandler', ['$injector', function($injector) {
+            return function(exception, cause) {
+                window.location.href = '/dashboard';
+            };
+        }])
         .controller('CustomerController', CustomerController);
 
     CustomerController.$inject = ['$scope','$http', '$filter'];
     function CustomerController($scope, $http, $filter) {
         var vm = this;
         vm.resources = [];
+        vm.availMR = [];
         vm.mr = [];
         vm.getAllResources = getAllResources;
         vm.allAvailMR = allAvailMR;
         vm.getCurrResource = getCurrResource;
         vm.reserveResource = reserveResource;
+        vm.reserveMR = reserveMR;
         vm.currResource = null;
 
         $scope.formModel= {};
@@ -25,9 +27,22 @@
         $scope.onSearchResources = function(valid){
             if(valid){
                 var url = "/customer/onSearchResources/"+ $scope.formModel.restype + "/" + $scope.formModel.options + "/" +$scope.formModel.searchitem;
-                var adminsPromise = $http.get(url);
                 $http.get(url).then(function (response) {
                     vm.resources = response.data;
+                });
+            }
+            else{
+                console.log(":( not valid");
+            }
+        }
+
+        $scope.onSearchMR = function(valid){
+            if(valid){
+                var usagedateformat = $filter("date")($scope.formModel.usagedate, 'yyyy-MM-dd');
+                console.log(usagedateformat);
+                var url = "/customer/onSearchMR/"+ $scope.formModel.starttime + "/" + usagedateformat;
+                $http.get(url).then(function (response) {
+                    vm.availMR = response.data;
                 });
             }
             else{
@@ -100,20 +115,30 @@
 
         function reserveResource(bookid) {
             var reservationdate = $filter("date")(Date.now(), 'yyyy-MM-dd');
-            var returndate = $filter("date")(Date.now(), 'yyyy-MM-dd') + 7;
+            var returndate = $filter("date")(Date.now(), 'yyyy-MM-dd');
             var status = 1;
             var userid = 1;
 
             var url = "/customer/reserveResource/" + bookid + "/" + reservationdate  + "/" + returndate + "/"  + status + "/" + userid;
-            console.log("url: " + url);
-            var adminsPromise = $http.post(url);
             $http.post(url).then(function (response) {
                 vm.resources = response.data;
             });
         }
 
-        function allAvailMR() {
-            var url = "/customer/allAvailMR";
+        function reserveMR(meetingroomid, usagedate, starttime) {
+            var usagedateformat = $filter("date")(usagedate, 'yyyy-MM-dd');
+
+            var reservationdate = $filter("date")(Date.now(), 'yyyy-MM-dd');
+            var userid = 1;
+
+            var url = "/customer/reserveMR/" + meetingroomid + "/" + userid  + "/" + reservationdate + "/"  + usagedateformat + "/" + starttime;
+            $http.post(url).then(function (response) {
+                vm.resources = response.data;
+            });
+        }
+
+        function allAvailMR(searchdate) {
+            var url = "/customer/allAvailMR/" + searchdate;
             var adminsPromise = $http.get(url);
             $http.get(url).then(function (response) {
                 vm.mr = response.data;

@@ -17,6 +17,11 @@ public class Meetingroom {
     public Meetingroom() {
     }
 
+    public Meetingroom(int meetingroomid, String roomname) {
+        this.meetingroomid = meetingroomid;
+        this.roomname = roomname;
+    }
+
     public int getMeetingroomid() {
         return meetingroomid;
     }
