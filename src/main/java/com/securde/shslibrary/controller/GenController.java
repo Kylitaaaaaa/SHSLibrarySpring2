@@ -49,7 +49,7 @@ public class GenController {
 
         RandomStringGenerator gen = new RandomStringGenerator();
         user.setPassword(passwordEncoder.encode(gen.genString(10)));
-
+        user.setSecretanswer(passwordEncoder.encode(user.getSecretanswer()));
         userRepository.save(user);
 
 
