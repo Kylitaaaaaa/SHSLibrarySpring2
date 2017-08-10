@@ -200,19 +200,24 @@ public class CustomerController {
 
     }
 
-    @RequestMapping (value= "/passwordChange/{password}/{confirmpassword}/{idnumber}", method=RequestMethod.POST)
-    public void changePassword(@PathParam(value="idnumber") @PathVariable int idnumber,
+    @RequestMapping (value= "/passwordChange/{password}/{confirmpassword}/{idnumber}", method=RequestMethod.GET)
+    public @ResponseBody
+    Iterable <User> changePassword(
                                @PathParam(value="password") @PathVariable String password,
-                               @PathParam(value="confirmpassword") @PathVariable String confirmpassword){
+                               @PathParam(value="confirmpassword") @PathVariable String confirmpassword,
+                               @PathParam(value="idnumber") @PathVariable int idnumber){
         User u = userRepository.findUserByIdnumberLike(idnumber);
-        if(password==confirmpassword){
+        if(password.equals(confirmpassword)){
+            System.out.println(password+"  ===   "+confirmpassword);
+
             if(passwordChecker(password)){
                 u.setPassword(passwordEncoder.encode(password));
                 userRepository.save(u);
+                return userRepository.findAll();
             }
 
         }
-
+        return null;
     }
 
     public boolean passwordChecker(String password){
@@ -231,6 +236,7 @@ public class CustomerController {
                     (password.charAt(i)>=91 && password.charAt(i)<=96)||
                     (password.charAt(i)>=123 && password.charAt(i)<=126))
                 symbol++;
+            System.out.println("Upper="+upper+" Lower="+lower+" Symbol="+symbol+" Number="+"number");
         }
         if(upper<1&&lower<1&&symbol<1&&number<1)
             return false;
