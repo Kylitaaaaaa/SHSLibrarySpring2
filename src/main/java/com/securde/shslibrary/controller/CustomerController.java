@@ -73,7 +73,7 @@ public class CustomerController {
     @RequestMapping(value = "/canReview/{bookid}/{userid}", method = RequestMethod.GET)
     public int canReview(@PathParam(value = "bookid") @PathVariable int bookid,
                        @PathParam(value = "userid") @PathVariable int userid) {
-        List <Review> r = reviewRepository.findReviewByBookidAndUserid(bookid, userid);
+        List <Resourcereservation> r = resourceReservationRepository.findResourcereservationByBookidAndUserid(bookid, userid);
         if(r.size() ==0)
             return 1;
         return 0;
@@ -108,7 +108,7 @@ public class CustomerController {
     }
 
     @RequestMapping(value = "/reserveResource/{bookid}/{reservationdate}/{returndate}/{status}/{userid}", method = RequestMethod.POST)
-    public void reserveResource(@PathParam(value = "bookid") @PathVariable int bookid,
+    public Iterable <Resource> reserveResource(@PathParam(value = "bookid") @PathVariable int bookid,
                                 @PathParam(value = "reservationdate") @PathVariable String reservationdate,
                                 @PathParam(value = "returndate") @PathVariable String returndate,
                                 @PathParam(value = "status") @PathVariable int status,
@@ -126,6 +126,8 @@ public class CustomerController {
         Resource res = resourceRepository.findResourceByBookidLike(bookid);
         res.setStatus(status);
         resourceRepository.save(res);
+
+        return resourceRepository.findAll();
     }
 
 
@@ -147,7 +149,7 @@ public class CustomerController {
 
 
     @RequestMapping(value = "/onReview/{reviewcontent}/{bookid}/{userid}/{currdate}", method = RequestMethod.POST)
-    public void onReview(@PathParam(value = "reviewcontent") @PathVariable String reviewcontent,
+    public List <Review> onReview(@PathParam(value = "reviewcontent") @PathVariable String reviewcontent,
                                                         @PathParam(value = "bookid") @PathVariable int bookid,
                                                         @PathParam(value = "userid") @PathVariable int userid,
                                                         @PathParam(value = "currdate") @PathVariable String currdate){
@@ -158,11 +160,14 @@ public class CustomerController {
         r.setReviewdate(currdate);
         r.setUserid(userid);
         reviewRepository.save(r);
+
+        return reviewRepository.findReviewByBookidLike(bookid);
+
     }
 
 
     @RequestMapping(value = "/reserveMR/{meetingroomid}/{userid}/{reservationdate}/{usagedate}/{starttime}", method = RequestMethod.POST)
-    public void reserveResource(@PathParam(value = "meetingroomid") @PathVariable int meetingroomid,
+    public void reserveMR(@PathParam(value = "meetingroomid") @PathVariable int meetingroomid,
                                 @PathParam(value = "userid") @PathVariable int userid,
                                 @PathParam(value = "reservationdate") @PathVariable String reservationdate,
                                 @PathParam(value = "usagedate") @PathVariable String usagedate,
@@ -177,16 +182,9 @@ public class CustomerController {
 
         meetingRoomReservationRepository.save(mr);
 
-    }
 
-    /*
-    @RequestMapping(value = "/reserveMRRes", method = RequestMethod.POST)
-    public void reserveMRRes(@RequestBody Meetingroomreservation meetingroomreservation){
-        meetingRoomReservationRepository.save(meetingroomreservation);
 
-        Meetingroom mr = meetingRoomRepository.findMeetingroomByMeetingroomidLike(meetingroomreservation.getMrid());
-        //mr.setRoomstatus(2);
-        meetingRoomRepository.save(mr);
+
+
     }
-    */
 }

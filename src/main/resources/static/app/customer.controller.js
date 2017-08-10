@@ -2,15 +2,16 @@
     'use strict:';
     angular
         .module('app', ['toaster', 'ngAnimate'])
-        .factory('$exceptionHandler', ['$injector', function($injector) {
-            return function(exception, cause) {
-                window.location.href = '/dashboard';
-            };
-        }])
+        // .factory('$exceptionHandler', ['$injector', function($injector) {
+        //     return function(exception, cause) {
+        //         window.location.href = '/dashboard';
+        //     };
+        // }])
         .controller('CustomerController', CustomerController);
 
     CustomerController.$inject = ['$scope','$http', '$filter'];
     function CustomerController($scope, $http, $filter) {
+        init();
         var vm = this;
         vm.resources = [];
         vm.review = [];
@@ -57,15 +58,12 @@
         $scope.onReview = function(valid){
             if(valid){
                 var currdate = $filter("date")(Date.now(), 'yyyy-MM-dd');
-                console.log(usagedateformat);
+                console.log(currdate);
                 var userid = 1;
                 var url = "/customer/onReview/"+ $scope.formModel.reviewcontent + "/" + vm.currResource.bookid + "/" + userid + "/" + currdate;
-                $http.post(url, $scope.formModel)
-                    .then(function success(response) {
-                        console.log("success");
-                    }, function error(response) {
-                        console.log("fail");
-                    });
+                $http.post(url, $scope.formModel).then(function (response) {
+                    vm.review = response.data;
+                });
             }
             else{
                 console.log(":( not valid");
@@ -93,19 +91,16 @@
             if(valid){
                 var url = "/customer/reserveMRRes";
                 $scope.formModel.resdate = $filter("date")(Date.now(), 'yyyy-MM-dd');
-                $http.post(url, $scope.formModel)
-                    .then(function success(response) {
-                        console.log("success");
-                    }, function error(response) {
-                        console.log("fail");
-                    });
+                $http.post(url, $scope.formModel).then(function (response) {
+                    vm.review = response.data;
+                });
             }
             else{
                 console.log(":( not valid");
             }
 
         }
-        init();
+
 
         function init(){
             getAllResources();
@@ -169,7 +164,6 @@
 
         function getCurrResource(bookid) {
             var url = "/customer/getCurrResource/" + bookid;
-            console.log("url: " + url);
             var adminsPromise = $http.get(url);
             adminsPromise.then(function(response){
                 vm.currResource = response.data;
