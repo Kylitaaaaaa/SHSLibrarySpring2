@@ -213,6 +213,7 @@ public class CustomerController {
             if(passwordChecker(password)){
                 u.setPassword(passwordEncoder.encode(password));
                 userRepository.save(u);
+                System.out.println(passwordEncoder.matches("b@nDiT",u.getPassword()));
                 return userRepository.findAll();
             }
 
@@ -236,7 +237,7 @@ public class CustomerController {
                     (password.charAt(i)>=91 && password.charAt(i)<=96)||
                     (password.charAt(i)>=123 && password.charAt(i)<=126))
                 symbol++;
-            System.out.println("Upper="+upper+" Lower="+lower+" Symbol="+symbol+" Number="+"number");
+            System.out.println("Upper="+upper+" Lower="+lower+" Symbol="+symbol+" Number="+number);
         }
         if(upper<1&&lower<1&&symbol<1&&number<1)
             return false;
