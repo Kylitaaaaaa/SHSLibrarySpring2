@@ -3,11 +3,11 @@
     angular
         .module('app', ['toaster', 'ngAnimate'])
 
-        .factory('$exceptionHandler', ['$injector', function($injector) {
-            return function(exception, cause) {
-                window.location.href = '/dashboard';
-            };
-        }])
+        // .factory('$exceptionHandler', ['$injector', function($injector) {
+        //     return function(exception, cause) {
+        //         window.location.href = '/dashboard';
+        //     };
+        // }])
         .controller('GenController', GenController);
 
     GenController.$inject = ['$scope','$http'];
@@ -22,6 +22,7 @@
         vm.getAllStudent = getAllStudent;
         vm.create = create;
         vm.unlockUser = unlockUser;
+        vm.currPrev = null;
 
         $scope.formModel= {};
         $scope.onSubmit = function(valid){
@@ -45,11 +46,13 @@
         init();
         function init() {
             getAllMan();
+            vm.currPrev = 1;
         }
 
         function getAll() {
             var url = "/gen/allAdmin";
             var adminsPromise = $http.get(url);
+            vm.currPrev = 0;
             adminsPromise.then(function(response){
                 vm.users = response.data;
             });
@@ -65,6 +68,7 @@
 
         function getAllMan() {
             var url = "/gen/type/" + 1;
+            vm.currPrev = 1;
             var adminsPromise = $http.get( url);
             adminsPromise.then(function(response){
                 vm.users = response.data;
@@ -73,6 +77,7 @@
 
         function getAllStaff() {
             var url = "/gen/type/" + 2;
+            vm.currPrev = 2;
             var adminsPromise = $http.get( url);
             adminsPromise.then(function(response){
                 vm.users = response.data;
@@ -81,6 +86,7 @@
 
         function getAllProf() {
             var url = "/gen/type/" + 3;
+            vm.currPrev = 3;
             var adminsPromise = $http.get( url);
             adminsPromise.then(function(response){
                 vm.users = response.data;
@@ -89,6 +95,7 @@
 
         function getAllStudent() {
             var url = "/gen/type/" + 4;
+            vm.currPrev = 4;
             var adminsPromise = $http.get( url);
             adminsPromise.then(function(response){
                 vm.users = response.data;
@@ -96,8 +103,7 @@
         }
 
         function unlockUser(resid) {
-            var url = "/gen/unlockUser/" + resid;
-            var adminsPromise = $http.get(url);
+            var url = "/gen/unlockUser/" + resid + "/" + vm.currPrev;
             $http.post(url).then(function (response) {
                 vm.users = response.data;
             });

@@ -3,6 +3,8 @@ package com.securde.shslibrary.controller;
 import com.securde.shslibrary.model.*;
 import com.securde.shslibrary.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
@@ -12,6 +14,12 @@ import java.util.List;
 @RestController
 @RequestMapping(value="/customer")
 public class CustomerController {
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     @Autowired
     ResourceRepository resourceRepository;
 
@@ -79,7 +87,7 @@ public class CustomerController {
 
     @RequestMapping(value = "/canReview/{bookid}/{userid}", method = RequestMethod.GET)
     public int canReview(@PathParam(value = "bookid") @PathVariable int bookid,
-                       @PathParam(value = "userid") @PathVariable int userid) {
+                         @PathParam(value = "userid") @PathVariable int userid) {
         List <Resourcereservation> r = resourceReservationRepository.findResourcereservationByBookidAndUserid(bookid, userid);
         if(r.size() ==0)
             return 1;
@@ -117,10 +125,10 @@ public class CustomerController {
 
     @RequestMapping(value = "/reserveResource/{bookid}/{reservationdate}/{returndate}/{status}/{userid}", method = RequestMethod.POST)
     public Iterable <Resource> reserveResource(@PathParam(value = "bookid") @PathVariable int bookid,
-                                @PathParam(value = "reservationdate") @PathVariable String reservationdate,
-                                @PathParam(value = "returndate") @PathVariable String returndate,
-                                @PathParam(value = "status") @PathVariable int status,
-                                @PathParam(value = "userid") @PathVariable int userid) {
+                                               @PathParam(value = "reservationdate") @PathVariable String reservationdate,
+                                               @PathParam(value = "returndate") @PathVariable String returndate,
+                                               @PathParam(value = "status") @PathVariable int status,
+                                               @PathParam(value = "userid") @PathVariable int userid) {
 
         Resourcereservation r = new Resourcereservation();
         r.setBookid(bookid);
@@ -141,7 +149,7 @@ public class CustomerController {
 
     @RequestMapping(value = "/onSearchMR/{starttime}/{usagedateformat}", method = RequestMethod.GET)
     public @ResponseBody Iterable<Meetingroom> onSearchMR(@PathParam(value = "starttime") @PathVariable int starttime,
-                                                                     @PathParam(value = "usagedateformat") @PathVariable String usagedateformat){
+                                                          @PathParam(value = "usagedateformat") @PathVariable String usagedateformat){
 
         List<Meetingroom> mList = meetingRoomRepository.findAll();
         List<Meetingroomreservation> mrList = meetingRoomReservationRepository.findMeetingroomreservationByUsagedateAndStarttime(usagedateformat, starttime);
@@ -158,9 +166,9 @@ public class CustomerController {
 
     @RequestMapping(value = "/onReview/{reviewcontent}/{bookid}/{userid}/{currdate}", method = RequestMethod.POST)
     public List <Review> onReview(@PathParam(value = "reviewcontent") @PathVariable String reviewcontent,
-                                                        @PathParam(value = "bookid") @PathVariable int bookid,
-                                                        @PathParam(value = "userid") @PathVariable int userid,
-                                                        @PathParam(value = "currdate") @PathVariable String currdate){
+                                  @PathParam(value = "bookid") @PathVariable int bookid,
+                                  @PathParam(value = "userid") @PathVariable int userid,
+                                  @PathParam(value = "currdate") @PathVariable String currdate){
 
         Review r = new Review();
         r.setBookid(bookid);
@@ -176,10 +184,10 @@ public class CustomerController {
 
     @RequestMapping(value = "/reserveMR/{meetingroomid}/{userid}/{reservationdate}/{usagedate}/{starttime}", method = RequestMethod.POST)
     public void reserveMR(@PathParam(value = "meetingroomid") @PathVariable int meetingroomid,
-                                @PathParam(value = "userid") @PathVariable int userid,
-                                @PathParam(value = "reservationdate") @PathVariable String reservationdate,
-                                @PathParam(value = "usagedate") @PathVariable String usagedate,
-                                @PathParam(value = "starttime") @PathVariable int starttime) {
+                          @PathParam(value = "userid") @PathVariable int userid,
+                          @PathParam(value = "reservationdate") @PathVariable String reservationdate,
+                          @PathParam(value = "usagedate") @PathVariable String usagedate,
+                          @PathParam(value = "starttime") @PathVariable int starttime) {
 
         Meetingroomreservation mr = new Meetingroomreservation();
         mr.setMrid(meetingroomid);
@@ -190,9 +198,50 @@ public class CustomerController {
 
         meetingRoomReservationRepository.save(mr);
 
+    }
 
+    @RequestMapping (value= "/passwordChange/{password}/{confirmpassword}/{idnumber}", method=RequestMethod.GET)
+    public @ResponseBody
+    Iterable <User> changePassword(
+            @PathParam(value="password") @PathVariable String password,
+            @PathParam(value="confirmpassword") @PathVariable String confirmpassword,
+            @PathParam(value="idnumber") @PathVariable int idnumber){
+        User u = userRepository.findUserByIdnumberLike(idnumber);
+        if(password.equals(confirmpassword)){
+            System.out.println(password+"  ===   "+confirmpassword);
 
+            if(passwordChecker(password)){
+                u.setPassword(passwordEncoder.encode(password));
+                userRepository.save(u);
+                System.out.println(passwordEncoder.matches(password,u.getPassword()));
+                return userRepository.findAll();
+            }
 
+        }
+        return null;
+    }
 
+    public boolean passwordChecker(String password){
+        int upper=0,lower=0,symbol=0,number=0;
+        if(password.length()<6)
+            return false;
+        for(int i=0;i<password.length();i++){
+            if(password.charAt(i)>=65 && password.charAt(i)<=90 )
+                upper++;
+            if(password.charAt(i)>=97 && password.charAt(i)<=122)
+                lower++;
+            if(password.charAt(i)>=48 && password.charAt(i)<=57)
+                number++;
+            if((password.charAt(i)>=33 && password.charAt(i)<=47)||
+                    (password.charAt(i)>=58 && password.charAt(i)<=64)||
+                    (password.charAt(i)>=91 && password.charAt(i)<=96)||
+                    (password.charAt(i)>=123 && password.charAt(i)<=126))
+                symbol++;
+            System.out.println("Upper="+upper+" Lower="+lower+" Symbol="+symbol+" Number="+number);
+        }
+        if(upper<1&&lower<1&&symbol<1&&number<1)
+            return false;
+
+        return true;
     }
 }
