@@ -34,8 +34,10 @@ public class LogInController {
     @RequestMapping(value = "/attempt", method = RequestMethod.POST)
     public User attempt(@RequestBody User user){
         User u = userRepository.findUserByIdnumberLike(user.getIdnumber());
+        if(u==null)
+         return null;
         if(u != null) {
-            if (u.getLockstatus() == 1) {
+            if (u.getLockstatus() == 0) {
                 if (u.getPassword().equals(user.getPassword()))
                     return u;
                 else {

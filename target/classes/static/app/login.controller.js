@@ -22,22 +22,26 @@
         $scope.formModel= {};
         $scope.onAttempt = function(valid){
             if(valid){
-                // var url = "/logincontroller/attempt";
-                // sample = $http.post(url, $scope.formModel);
-                // console.log(sample);
+                 var url = "/logincontroller/attempt";
+                 sample = $http.post(url, $scope.formModel);
+                 console.log(sample);
 
-
-
-                isAcctExist($scope.formModel.idnumber);
-                console.log("vm content" + $scope.formModel.idnumber);
-                console.log("vm response" + vm.resp);
-                if(vm.resp == true) {
-                    getAcct($scope.formModel.idnumber);
-                    console.log("vm acct" + vm.currAcct);
-                    if(vm.currAcct.lockstatus == 1)
-                        alert("Account is locked");
-                    else{
-                        alert("Account is not locked");
+                if(sample.idnumber==null)
+                    console.log("NULL SAMPLE");
+                else
+                {
+                    console.log("NOT NULL SAMPLE");
+                    isAcctExist($scope.formModel.idnumber);
+                    console.log("vm content" + $scope.formModel.idnumber);
+                    console.log("vm response" + vm.resp);
+                    if(vm.resp == true) {
+                        getAcct($scope.formModel.idnumber);
+                        console.log("vm acct" + vm.currAcct);
+                        if (vm.currAcct.lockstatus == 1)
+                            alert("Account is locked");
+                        else {
+                            alert("Account is not locked");
+                        }
                     }
                 }
                 console.log("done");

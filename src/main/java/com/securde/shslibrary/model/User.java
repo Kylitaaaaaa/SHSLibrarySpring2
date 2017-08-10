@@ -18,11 +18,11 @@ import java.util.Collection;
 @Table(name = "user")
 public class User implements UserDetails{
     @Id
-    @Column(name = "user_id", nullable = false, updatable = false)
+    @Column(name = "userid", nullable = false, updatable = false)
     private int userid;
     private int usertype;
 
-    @Column(name = "id_number", nullable = false, updatable = false)
+    @Column(name = "idnumber", nullable = false, updatable = false)
     private int idnumber;
     private String password;
     private String emailaddress;
