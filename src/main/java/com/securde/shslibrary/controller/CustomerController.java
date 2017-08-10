@@ -3,6 +3,8 @@ package com.securde.shslibrary.controller;
 import com.securde.shslibrary.model.*;
 import com.securde.shslibrary.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
@@ -12,6 +14,12 @@ import java.util.List;
 @RestController
 @RequestMapping(value="/customer")
 public class CustomerController {
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     @Autowired
     ResourceRepository resourceRepository;
 
@@ -190,9 +198,43 @@ public class CustomerController {
 
         meetingRoomReservationRepository.save(mr);
 
+    }
 
+    @RequestMapping (value= "/passwordChange/{password}/{confirmpassword}/{idnumber}", method=RequestMethod.POST)
+    public void changePassword(@PathParam(value="idnumber") @PathVariable int idnumber,
+                               @PathParam(value="password") @PathVariable String password,
+                               @PathParam(value="confirmpassword") @PathVariable String confirmpassword){
+        User u = userRepository.findUserByIdnumberLike(idnumber);
+        if(password==confirmpassword){
+            if(passwordChecker(password)){
+                u.setPassword(passwordEncoder.encode(password));
+                userRepository.save(u);
+            }
 
+        }
 
+    }
 
+    public boolean passwordChecker(String password){
+        int upper=0,lower=0,symbol=0,number=0;
+        if(password.length()<6)
+            return false;
+        for(int i=0;i<password.length();i++){
+            if(password.charAt(i)>=65 && password.charAt(i)<=90 )
+                upper++;
+            if(password.charAt(i)>=97 && password.charAt(i)<=122)
+                lower++;
+            if(password.charAt(i)>=48 && password.charAt(i)<=57)
+                number++;
+            if((password.charAt(i)>=33 && password.charAt(i)<=47)||
+                    (password.charAt(i)>=58 && password.charAt(i)<=64)||
+                    (password.charAt(i)>=91 && password.charAt(i)<=96)||
+                    (password.charAt(i)>=123 && password.charAt(i)<=126))
+                symbol++;
+        }
+        if(upper<1&&lower<1&&symbol<1&&number<1)
+            return false;
+
+        return true;
     }
 }
