@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>SHS Library Customer</title>
+    <title>Spring Boot Thymeleaf Hello World Example</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
 
@@ -30,7 +30,7 @@
                     <ul id="menu-content" class="menu-content collapse out">
                         <li>
                             <a href="#" id = "resourceTab">
-                                <i class="fa fa-dashboard fa-lg"></i> Resources
+                                <i class="fa fa-dashboard fa-lg" ng-click="vm.getAllResources()"></i> Resources
                             </a>
                         </li>
                         <li>
@@ -137,7 +137,7 @@
                 <div class="form-group">
                     <label for="selectDate">Usage Date</label>
                     <input type="date" id="selectDate" name="input" ng-model="formModel.usagedate"
-                           placeholder="yyyy-MM-dd" min="2017-08-11" max="2020-12-31" required="required"/>
+                           placeholder="yyyy-MM-dd" min="2013-01-01" max="2020-12-31" required="required"/>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
@@ -223,9 +223,9 @@
                           name = "searchForm3">
                         <div class="form-group">
                             <label for="selectDate">Review Content</label>
-                            <input type="text" class="form-control" id="edit_room_res_roomid" placeholder="Enter Review" autocomplete="off" ng-model="formModel.reviewcontent"/>
+                            <input type="text" class="form-control" id="edit_room_res_roomid" placeholder="Enter Review" ng-model="formModel.reviewcontent"/>
                         </div>
-                        <button type="submit" class="btn btn-primary" data-dismiss="modal">Submit</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
 

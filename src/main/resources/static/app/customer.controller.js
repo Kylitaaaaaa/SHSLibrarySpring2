@@ -2,11 +2,11 @@
     'use strict:';
     angular
         .module('app', ['toaster', 'ngAnimate'])
-        .factory('$exceptionHandler', ['$injector', function($injector) {
-            return function(exception, cause) {
-                window.location.href = '/dashboard';
-            };
-        }])
+        // .factory('$exceptionHandler', ['$injector', function($injector) {
+        //     return function(exception, cause) {
+        //         window.location.href = '/dashboard';
+        //     };
+        // }])
         .controller('CustomerController', CustomerController);
 
     CustomerController.$inject = ['$scope','$http', '$filter'];
@@ -136,8 +136,7 @@
             var status = 1;
             var userid = 1;
 
-            var url = "/customer/reserveResource/" + bookid + "/" + reservationdate  + "/" + returndate + "/"  + status + "/" + userid + "/" + $scope.formModel.restype + "/" + $scope.formModel.options + "/" +$scope.formModel.searchitem;
-
+            var url = "/customer/reserveResource/" + bookid + "/" + reservationdate  + "/" + returndate + "/"  + status + "/" + userid;
             $http.post(url).then(function (response) {
                 vm.resources = response.data;
             });
@@ -151,7 +150,7 @@
 
             var url = "/customer/reserveMR/" + meetingroomid + "/" + userid  + "/" + reservationdate + "/"  + usagedateformat + "/" + starttime;
             $http.post(url).then(function (response) {
-                vm.availMR = response.data;
+                vm.resources = response.data;
             });
         }
 
