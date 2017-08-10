@@ -62,6 +62,8 @@
             if(valid){
                 var url = "/libman/saveResourceRes";
                 $scope.formModel.resid = vm.currResourceRes.resid;
+                $scope.formModel.bookid = vm.currResourceRes.bookid;
+                console.log("book " + vm.currResourceRes.bookid);
 
                 $http.post(url, $scope.formModel).then(function (response) {
                     vm.resourceRes = response.data;

@@ -136,6 +136,7 @@ public class CustomerController {
 
         Resource res = resourceRepository.findResourceByBookidLike(bookid);
         res.setStatus(status);
+        res.setReturndate(returndate);
         resourceRepository.save(res);
 
         if(restype != 1 && restype !=2 && restype !=3)
@@ -191,6 +192,7 @@ public class CustomerController {
 
         Resource res = resourceRepository.findResourceByBookidLike(bookid);
         res.setStatus(status);
+        res.setReturndate(returndate);
         resourceRepository.save(res);
         return resourceRepository.findAll();
 

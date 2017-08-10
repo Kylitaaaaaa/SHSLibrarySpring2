@@ -51,9 +51,23 @@ public class LibManController {
     @RequestMapping(value = "/saveResourceRes", method = RequestMethod.POST)
     public @ResponseBody
     Iterable <Resourcereservation> saveResourceRes(@RequestBody Resourcereservation resourcereservation){
-        Resourcereservation r = resourceReservationRepository.findResourcereservationByResidLike(resourcereservation.getResid());
-        r.setStatus(resourcereservation.getStatus());
-        resourceReservationRepository.save(r);
+        if(resourcereservation.getStatus() ==0){
+            resourceReservationRepository.delete(resourcereservation.getResid());
+            Resource temp = resourceRepository.findResourceByBookidLike(resourcereservation.getBookid());
+            temp.setStatus(0);
+            temp.setReturndate(null);
+            resourceRepository.save(temp);
+        }
+        else{
+            Resourcereservation r = resourceReservationRepository.findResourcereservationByResidLike(resourcereservation.getResid());
+            r.setStatus(resourcereservation.getStatus());
+            resourceReservationRepository.save(r);
+
+            Resource temp = resourceRepository.findResourceByBookidLike(resourcereservation.getBookid());
+            temp.setStatus(resourcereservation.getStatus());
+            resourceRepository.save(temp);
+        }
+
         return  resourceReservationRepository.findAll();
     }
 
@@ -70,6 +84,7 @@ public class LibManController {
     @RequestMapping(value = "/removeResource/{resid}", method = RequestMethod.POST)
     public @ResponseBody
     Iterable <Resource> removeResource(@PathParam(value = "resid") @PathVariable int resid) {
+
         resourceRepository.delete(resid);
 
         return resourceRepository.findAll();
@@ -78,7 +93,12 @@ public class LibManController {
     @RequestMapping(value = "/removeResourceRes/{resid}", method = RequestMethod.POST)
     public @ResponseBody
     Iterable <Resourcereservation> removeResourceRes(@PathParam(value = "resid") @PathVariable int resid) {
-        resourceReservationRepository.delete(resid);
+        Resourcereservation resourcereservation= resourceReservationRepository.findResourcereservationByResidLike(resid);
+            Resource temp = resourceRepository.findResourceByBookidLike(resourcereservation.getBookid());
+            temp.setStatus(0);
+            temp.setReturndate(null);
+            resourceRepository.save(temp);
+            resourceReservationRepository.delete(resourcereservation.getResid());
 
         return resourceReservationRepository.findAll();
     }

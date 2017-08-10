@@ -15,6 +15,15 @@ public class Resource {
     private int year;
     private String location;
     private int status;
+    private String returndate;
+
+    public String getReturndate() {
+        return returndate;
+    }
+
+    public void setReturndate(String returndate) {
+        this.returndate = returndate;
+    }
 
     public int getBookid() {
         return bookid;
