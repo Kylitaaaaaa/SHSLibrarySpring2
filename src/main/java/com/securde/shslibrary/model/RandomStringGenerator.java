@@ -21,8 +21,8 @@ public class RandomStringGenerator {
             salt.append(SALTCHARS.charAt(index));
         }
         String saltStr = salt.toString();
-        saltStr.concat(specialChars.charAt(rnd.nextInt(specialChars.length()))+" "+lCaseChars.charAt(rnd.nextInt(lCaseChars.length())));
-
-        return saltStr;
+        String output=saltStr+(specialChars.charAt(rnd.nextInt(specialChars.length()))+"a"+lCaseChars.charAt(rnd.nextInt(lCaseChars.length())));
+        System.out.println(output);
+        return output;
     }
 }
