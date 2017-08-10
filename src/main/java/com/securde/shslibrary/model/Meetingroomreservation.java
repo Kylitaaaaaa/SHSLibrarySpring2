@@ -14,20 +14,9 @@ public class Meetingroomreservation {
     private int userid;
     private String resdate;
     private String usagedate;
-    private String starttime;
-    private String endtime;
+    private int timeslot;
 
     public Meetingroomreservation() {
-    }
-
-    public Meetingroomreservation(int mrresid, int mrid, int userid, String resdate, String usagedate, String starttime, String endtime) {
-        this.mrresid = mrresid;
-        this.mrid = mrid;
-        this.userid = userid;
-        this.resdate = resdate;
-        this.usagedate = usagedate;
-        this.starttime = starttime;
-        this.endtime = endtime;
     }
 
     public int getMrresid() {
@@ -70,19 +59,11 @@ public class Meetingroomreservation {
         this.usagedate = usagedate;
     }
 
-    public String getStarttime() {
-        return starttime;
+    public int getTimeslot() {
+        return timeslot;
     }
 
-    public void setStarttime(String starttime) {
-        this.starttime = starttime;
-    }
-
-    public String getEndtime() {
-        return endtime;
-    }
-
-    public void setEndtime(String endtime) {
-        this.endtime = endtime;
+    public void setTimeslot(int timeslot) {
+        this.timeslot = timeslot;
     }
 }

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(value="/customer")
@@ -106,12 +108,29 @@ public class CustomerController {
         r.setUserid(userid);
 
         resourceReservationRepository.save(r);
+
+        Resource res = resourceRepository.findResourceByBookidLike(bookid);
+        res.setStatus(status);
+        resourceRepository.save(res);
     }
 
-    @RequestMapping(value = "/allAvailMR", method = RequestMethod.GET)
-    public @ResponseBody Iterable<Meetingroom> getAllAvailMR() {
-        return meetingRoomRepository.findMeetingroomByRoomstatusLike(0);
+    @RequestMapping(value = "/allAvailMR/{searchdate}", method = RequestMethod.GET)
+    public @ResponseBody Iterable<Meetingroomreservation> allAvailMR(@PathParam(value = "searchdate") @PathVariable String searchdate){
+        List<Meetingroomreservation> mrreslist = meetingRoomReservationRepository.findMeetingroomreservationByUsagedateLike(searchdate);
+        List <Meetingroom> mrlist = meetingRoomRepository.findAll();
+        List<Meetingroomreservation> mrreslistAvail = new ArrayList<Meetingroomreservation>();
+
+        for(int i=0; i<mrlist.size(); i++){
+            for(int j=1; j<=8; j++){
+                Meetingroomreservation mrsam = meetingRoomReservationRepository.findMeetingroomreservationByUsagedateAndTimeslotAndMrid(searchdate, j, mrlist.get(i).getMeetingroomid());
+                if(mrsam == null)
+                    mrreslistAvail.add(new Meetingroomreservation());
+
+
+            }
+        }
     }
+
 
     @RequestMapping(value = "/reserveMRRes", method = RequestMethod.POST)
     public void reserveMRRes(@RequestBody Meetingroomreservation meetingroomreservation){

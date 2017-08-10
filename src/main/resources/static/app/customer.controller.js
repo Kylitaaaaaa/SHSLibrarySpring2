@@ -100,7 +100,7 @@
 
         function reserveResource(bookid) {
             var reservationdate = $filter("date")(Date.now(), 'yyyy-MM-dd');
-            var returndate = $filter("date")(Date.now() + 7, 'yyyy-MM-dd');
+            var returndate = $filter("date")(Date.now(), 'yyyy-MM-dd');
             var status = 1;
             var userid = 1;
 
@@ -112,8 +112,8 @@
             });
         }
 
-        function allAvailMR() {
-            var url = "/customer/allAvailMR";
+        function allAvailMR(searchdate) {
+            var url = "/customer/allAvailMR/" + searchdate;
             var adminsPromise = $http.get(url);
             $http.get(url).then(function (response) {
                 vm.mr = response.data;

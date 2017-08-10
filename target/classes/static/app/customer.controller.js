@@ -100,7 +100,7 @@
 
         function reserveResource(bookid) {
             var reservationdate = $filter("date")(Date.now(), 'yyyy-MM-dd');
-            var returndate = $filter("date")(Date.now() + 7, 'yyyy-MM-dd');
+            var returndate = $filter("date")(Date.now(), 'yyyy-MM-dd') + 7;
             var status = 1;
             var userid = 1;
 
