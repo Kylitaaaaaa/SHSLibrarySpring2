@@ -35,6 +35,7 @@ public class GenController {
     Iterable <User> unlockUser(@PathParam(value = "uid") @PathVariable int uid) {
         User u = userRepository.findOne(uid);
         u.setLockstatus(0);
+        u.setLoginattempts(0);
         userRepository.save(u);
         return userRepository.findAll();
     }
