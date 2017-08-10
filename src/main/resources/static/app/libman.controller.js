@@ -2,22 +2,24 @@
     'use strict:';
     angular
         .module('app', [])
-        .factory('$exceptionHandler', ['$injector', function($injector) {
-            return function(exception, cause) {
-                window.location.href = '/dashboard';
-            };
-        }])
+        // .factory('$exceptionHandler', ['$injector', function($injector) {
+        //     return function(exception, cause) {
+        //         window.location.href = '/dashboard';
+        //     };
+        // }])
         .controller('LibManController', LibManController);
 
 
 
-    LibManController.$inject = ['$scope','$http'];
-    function LibManController($scope, $http) {
+    LibManController.$inject = ['$scope','$http', '$filter'];
+    function LibManController($scope, $http, $filter) {
+        init();
         var vm = this;
         vm.resources = [];
         vm.resourceRes = [];
         vm.mrRes = [];
         vm.currResource = null;
+        vm.currResourceRes = null;
         vm.getAllResources = getAllResources;
         vm.getAllResourcesRes = getAllResourcesRes;
         vm.getAllMRRes = getAllMRRes;
@@ -32,12 +34,24 @@
         $scope.onCreateRes = function(valid){
             if(valid){
                 var url = "/libman/createResource";
-                $http.post(url, $scope.formModel)
-                    .then(function success(response) {
-                        console.log("success");
-                    }, function error(response) {
-                        console.log("fail");
-                    });
+                console.log(url);
+                $http.post(url, $scope.formModel).then(function (response) {
+                    vm.resources = response.data;
+                });
+            }
+            else{
+                console.log(":( not valid");
+            }
+        }
+
+        $scope.onSearchMR = function(valid){
+            if(valid){
+                var usagedateformat = $filter("date")($scope.formModel.usagedate, 'yyyy-MM-dd');
+                console.log(usagedateformat);
+                var url = "/libstaff/onSearchMR/"+ $scope.formModel.starttime + "/" + usagedateformat;
+                $http.get(url).then(function (response) {
+                    vm.availMR = response.data;
+                });
             }
             else{
                 console.log(":( not valid");
@@ -47,12 +61,11 @@
         $scope.onSaveResourceRes = function(valid){
             if(valid){
                 var url = "/libman/saveResourceRes";
-                $http.post(url, $scope.formModel)
-                    .then(function success(response) {
-                        console.log("success");
-                    }, function error(response) {
-                        console.log("fail");
-                    });
+                $scope.formModel.resid = vm.currResourceRes.resid;
+
+                $http.post(url, $scope.formModel).then(function (response) {
+                    vm.resourceRes = response.data;
+                });
             }
             else{
                 console.log(":( not valid");
@@ -62,12 +75,11 @@
         $scope.onSaveRoomRes = function(valid){
             if(valid){
                 var url = "/libman/saveRoomRes";
-                $http.post(url, $scope.formModel)
-                    .then(function success(response) {
-                        console.log("success");
-                    }, function error(response) {
-                        console.log("fail");
-                    });
+                var temp = $filter("date")($scope.formModel.usagedate, 'yyyy-MM-dd');
+                $scope.formModel.usagedate = temp;
+                $http.post(url, $scope.formModel).then(function (response) {
+                    vm.mrRes = response.data;
+                });
             }
             else{
                 console.log(":( not valid");
@@ -76,7 +88,9 @@
 
 
 
-        init();
+
+
+
         function init() {
             getAllResources();
         }
@@ -152,6 +166,7 @@
             var url = "/libman/getCurrResourceRes/" + resid;
             var adminsPromise = $http.get(url);
             adminsPromise.then(function (response) {
+                vm.currResourceRes = response.data;
                 $scope.formModel = response.data;
             });
         }

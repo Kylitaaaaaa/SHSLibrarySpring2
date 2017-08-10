@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ResourceReservationRepository extends JpaRepository<Resourcereservation, Integer> {
     List<Resourcereservation> findResourcereservationByBookidAndUserid(int bookid, int userid);
+    Resourcereservation findResourcereservationByResidLike(int resid);
 }

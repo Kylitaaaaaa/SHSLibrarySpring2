@@ -43,8 +43,7 @@ public class LibManController {
     }
 
     @RequestMapping(value = "/createResource", method = RequestMethod.POST)
-    public @ResponseBody
-    Iterable <Resource> createResource(@RequestBody Resource resource){
+    public @ResponseBody Iterable <Resource> createResource(@RequestBody Resource resource){
         resourceRepository.save(resource);
         return  resourceRepository.findAll();
     }
@@ -52,7 +51,7 @@ public class LibManController {
     @RequestMapping(value = "/saveResourceRes", method = RequestMethod.POST)
     public @ResponseBody
     Iterable <Resourcereservation> saveResourceRes(@RequestBody Resourcereservation resourcereservation){
-        Resourcereservation r = resourceReservationRepository.findOne(resourcereservation.getResid());
+        Resourcereservation r = resourceReservationRepository.findResourcereservationByResidLike(resourcereservation.getResid());
         r.setStatus(resourcereservation.getStatus());
         resourceReservationRepository.save(r);
         return  resourceReservationRepository.findAll();
