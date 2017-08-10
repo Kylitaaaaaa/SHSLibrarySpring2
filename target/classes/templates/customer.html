@@ -49,8 +49,8 @@
             </div>
         </div>
         <div class="col-sm-9" id = "resourceTable">
-            <form method="post" ng-submit="onSearchResources(searchForm.$valid)"
-                  name = "searchForm">
+            <form method="post" ng-submit="onSearchResources(searchForm2.$valid)"
+                  name = "searchForm2">
                 <div class="form-group">
                     <label for="selectResType">Resource Type</label>
                     <select class="form-control" ng-model="formModel.restype" required="required" id="selectResType">
@@ -95,8 +95,8 @@
 
                         <tr ng-repeat="resources in vm.resources">
                             <td>
-                                <div  ng-if = "resources.status == 0">
-                                    <button type="button" class="btn btn-primary btn-block" ng-click="vm.getCurrResource(resources.bookid)">View</button>
+                                <div>
+                                    <button type="button" class="btn btn-primary btn-block" ng-click="vm.viewCurrResource(resources.bookid)" data-toggle="modal" data-target="#viewResource">View</button>
                                 </div>
                                 <div  ng-if = "resources.status == 0">
                                     <button type="button" class="btn btn-primary btn-block" ng-click="vm.reserveResource(resources.bookid)">Reserve</button>
@@ -179,40 +179,55 @@
                 <h3 class="modal-title">View Resource</h3>
             </div>
             <div class="modal-body">
+                <div>
+                    <label for="view_title">Title: </label>
+                    <label ng-bind="vm.currResource.title" id="view_title"/>
+                </div>
+                <div>
+                    <label for="view_author">Author: </label>
+                    <label ng-bind="vm.currResource.author" id="view_author"/>
+                </div>
+                <div>
+                    <label for="view_publisher">Publisher: </label>
+                    <label ng-bind="vm.currResource.publisher" id="view_publisher"/>
+                </div>
+                <div>
+                    <label for="view_year">Year: </label>
+                    <label ng-bind="vm.currResource.year" id="view_year"/>
+                </div>
+                <div>
+                    <label for="view_loc">Location: </label>
+                    <label ng-bind="vm.currResource.location" id="view_loc"/>
+                </div>
 
-                <!-- content goes here -->
-                <form method="post" ng-submit="onAddReview(saveRoomResForm.$valid)"
-                      name = "saveRoomResForm">
+                <div class="card-block p-0">
+                    <table class="table table-bordered table-definition mb-5">
+                        <thead class="table-warning ">
+                        <tr>
+                            <th>Review Date</th>
+                            <th>Review Content</th>
 
-                    <div class="form-group">
-                        <label for="edit_author">Room ID</label>
-                        <input type="text" class="form-control" id="edit_room_res_roomid" placeholder="Enter Room ID" ng-model="formModel.mrid"/>
-                    </div>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="review in vm.review">
+                            <td ng-bind="review.reviewdate"/>
+                            <td ng-bind="review.reviewcontent"/>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div  ng-if = "vm.canreview == 0">
 
-                    <div class="form-group">
-                        <label for="edit_author">User ID</label>
-                        <input type="text" class="form-control" id="edit_room_res_userid" placeholder="Enter User ID" ng-model="formModel.userid"/>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="edit_author">Usage Date</label>
-                        <input type="date" id="exampleInput" name="input" ng-model="formModel.usagedate"
-                               placeholder="yyyy-MM-dd" min="2013-01-01" max="2020-12-31" required="required"/>
-                    </div>
-
-
-
-                    <div class="form-group">
-                        <label for="edit_author">Start Time</label>
-                        <input type="text" class="form-control" id="edit_room_res_starttime" placeholder="Enter Start Time" ng-model="formModel.starttime"/>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="edit_author">End Time</label>
-                        <input type="text" class="form-control" id="edit_room_res_endtime" placeholder="Enter End Time" ng-model="formModel.endtime"/>
-                    </div>
-                    <button type="submit" id="submitEditRoomRes" class="btn btn-primary">Submit</button>
-                </form>
+                    <form method="post" ng-submit="onReview(searchForm3.$valid)"
+                          name = "searchForm3">
+                        <div class="form-group">
+                            <label for="selectDate">Review Content</label>
+                            <input type="text" class="form-control" id="edit_room_res_roomid" placeholder="Enter Review" ng-model="formModel.reviewcontent"/>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
 
             </div>
         </div>

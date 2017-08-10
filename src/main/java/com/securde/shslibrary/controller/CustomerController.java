@@ -19,13 +19,13 @@ public class CustomerController {
     ResourceReservationRepository resourceReservationRepository;
 
     @Autowired
-    ReviewRepository reviewRepository;
-
-    @Autowired
     MeetingRoomReservationRepository meetingRoomReservationRepository;
 
     @Autowired
     MeetingRoomRepository meetingRoomRepository;
+
+    @Autowired
+    ReviewRepository reviewRepository;
 
     @RequestMapping(value = "/onSearchResources/{restype}/{options}/{searchitem}", method = RequestMethod.GET)
     public @ResponseBody Iterable <Resource> onSearchResources(@PathParam(value = "restype") @PathVariable int restype,
@@ -64,10 +64,24 @@ public class CustomerController {
 
 
 
-    @RequestMapping(value = "/getCurrResource/{resid}", method = RequestMethod.GET)
+    @RequestMapping(value = "/getCurrResource/{bookid}", method = RequestMethod.GET)
     public @ResponseBody
-    Resource getCurrResource(@PathParam(value = "resid") @PathVariable int resid) {
-        return resourceRepository.findResourceByBookidLike(resid);
+    Resource getCurrResource(@PathParam(value = "bookid") @PathVariable int bookid) {
+        return resourceRepository.findResourceByBookidLike(bookid);
+    }
+
+    @RequestMapping(value = "/canReview/{bookid}/{userid}", method = RequestMethod.GET)
+    public int canReview(@PathParam(value = "bookid") @PathVariable int bookid,
+                       @PathParam(value = "userid") @PathVariable int userid) {
+        List <Review> r = reviewRepository.findReviewByBookidAndUserid(bookid, userid);
+        if(r.size() ==0)
+            return 1;
+        return 0;
+    }
+
+    @RequestMapping(value = "/getReviewCurrResource/{bookid}", method = RequestMethod.GET)
+    public @ResponseBody Iterable<Review> getReviewCurrResource(@PathParam(value = "bookid") @PathVariable int bookid) {
+        return reviewRepository.findReviewByBookidLike(bookid);
     }
 
     @RequestMapping(value = "/searchByAuthor/{author}", method = RequestMethod.GET)
@@ -130,6 +144,22 @@ public class CustomerController {
 
         return mList2;
     }
+
+
+    @RequestMapping(value = "/onReview/{reviewcontent}/{bookid}/{userid}/{currdate}", method = RequestMethod.POST)
+    public void onReview(@PathParam(value = "reviewcontent") @PathVariable String reviewcontent,
+                                                        @PathParam(value = "bookid") @PathVariable int bookid,
+                                                        @PathParam(value = "userid") @PathVariable int userid,
+                                                        @PathParam(value = "currdate") @PathVariable String currdate){
+
+        Review r = new Review();
+        r.setBookid(bookid);
+        r.setReviewcontent(reviewcontent);
+        r.setReviewdate(currdate);
+        r.setUserid(userid);
+        reviewRepository.save(r);
+    }
+
 
     @RequestMapping(value = "/reserveMR/{meetingroomid}/{userid}/{reservationdate}/{usagedate}/{starttime}", method = RequestMethod.POST)
     public void reserveResource(@PathParam(value = "meetingroomid") @PathVariable int meetingroomid,

@@ -13,20 +13,24 @@
     function CustomerController($scope, $http, $filter) {
         var vm = this;
         vm.resources = [];
+        vm.review = [];
         vm.availMR = [];
         vm.mr = [];
         vm.getAllResources = getAllResources;
         vm.allAvailMR = allAvailMR;
         vm.getCurrResource = getCurrResource;
+        vm.viewCurrResource = viewCurrResource;
         vm.reserveResource = reserveResource;
         vm.reserveMR = reserveMR;
         vm.currResource = null;
+        vm.canreview = null;
 
         $scope.formModel= {};
 
         $scope.onSearchResources = function(valid){
             if(valid){
                 var url = "/customer/onSearchResources/"+ $scope.formModel.restype + "/" + $scope.formModel.options + "/" +$scope.formModel.searchitem;
+                console.log(url);
                 $http.get(url).then(function (response) {
                     vm.resources = response.data;
                 });
@@ -44,6 +48,24 @@
                 $http.get(url).then(function (response) {
                     vm.availMR = response.data;
                 });
+            }
+            else{
+                console.log(":( not valid");
+            }
+        }
+
+        $scope.onReview = function(valid){
+            if(valid){
+                var currdate = $filter("date")(Date.now(), 'yyyy-MM-dd');
+                console.log(usagedateformat);
+                var userid = 1;
+                var url = "/customer/onReview/"+ $scope.formModel.reviewcontent + "/" + vm.currResource.bookid + "/" + userid + "/" + currdate;
+                $http.post(url, $scope.formModel)
+                    .then(function success(response) {
+                        console.log("success");
+                    }, function error(response) {
+                        console.log("fail");
+                    });
             }
             else{
                 console.log(":( not valid");
@@ -145,12 +167,30 @@
             });
         }
 
-
-        function getCurrResource(resid) {
-            var url = "/customer/getCurrResource/" + resid;
+        function getCurrResource(bookid) {
+            var url = "/customer/getCurrResource/" + bookid;
+            console.log("url: " + url);
             var adminsPromise = $http.get(url);
             adminsPromise.then(function(response){
                 vm.currResource = response.data;
+            });
+        }
+        function viewCurrResource(bookid) {
+            var url = "/customer/getCurrResource/" + bookid;
+            var adminsPromise = $http.get(url);
+            adminsPromise.then(function(response){
+                vm.currResource = response.data;
+            });
+
+            url = "/customer/getReviewCurrResource/" + bookid;
+            $http.get(url).then(function(response){
+                vm.review = response.data;
+            });
+
+            var userid = 1;
+            url = "/customer/canReview/" + bookid + "/" + userid;
+            $http.get(url).then(function(response){
+                vm.canreview = response.data;
             });
         }
 
