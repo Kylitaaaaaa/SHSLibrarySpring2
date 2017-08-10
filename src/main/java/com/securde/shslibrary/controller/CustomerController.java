@@ -27,31 +27,38 @@ public class CustomerController {
     @Autowired
     ReviewRepository reviewRepository;
 
+
     @RequestMapping(value = "/onSearchResources/{restype}/{options}/{searchitem}", method = RequestMethod.GET)
     public @ResponseBody Iterable <Resource> onSearchResources(@PathParam(value = "restype") @PathVariable int restype,
-                                                            @PathParam(value = "options") @PathVariable int options,
-                                                            @PathParam(value = "searchitem") @PathVariable String searchitem) {
-        if(restype == 0){
+                                                               @PathParam(value = "options") @PathVariable int options,
+                                                               @PathParam(value = "searchitem") @PathVariable String searchitem) {
+        System.out.println("Restype "+restype+" AAA Option "+options);
+        if(restype == 3){
             if(options == 0) {
                 String searchitem2 = searchitem;
                 String searchitem3 = searchitem;
-                return resourceRepository.findResourceByAuthorOrPublisherOrTitle(searchitem, searchitem2, searchitem3);
+                return resourceRepository.findResourceByAuthorIgnoreCaseContainingOrPublisherIgnoreCaseContainingOrTitleIgnoreCaseContaining(searchitem, searchitem2, searchitem3);
             }
             else if(options == 1)
-                return resourceRepository.findResourceByAuthorLike(searchitem);
+                return resourceRepository.findResourceByAuthorIgnoreCaseContaining(searchitem);
             else if(options == 2)
-                return resourceRepository.findResourceByPublisherLike(searchitem);
+                return resourceRepository.findResourceByPublisherIgnoreCaseContaining(searchitem);
             else if(options == 3)
-                return resourceRepository.findResourceByTitleLike(searchitem);
+                return resourceRepository.findResourceByTitleIgnoreCaseContaining(searchitem);
         }
 
         else{
+            if(options == 0) {
+                String searchitem2 = searchitem;
+                String searchitem3 = searchitem;
+                return resourceRepository.findResourceByAuthorIgnoreCaseContainingOrPublisherIgnoreCaseContainingOrTitleIgnoreCaseContainingAndBooktype(searchitem, searchitem2, searchitem3, restype);
+            }
             if(options == 1)
-                return resourceRepository.findResourceByAuthorAndBooktype(searchitem, restype);
+                return resourceRepository.findResourceByAuthorIgnoreCaseContainingAndBooktype(searchitem, restype);
             else if(options == 2)
-                return resourceRepository.findResourceByPublisherAndBooktype(searchitem, restype);
+                return resourceRepository.findResourceByPublisherIgnoreCaseContainingAndBooktype(searchitem, restype);
             else if(options == 3)
-                return resourceRepository.findResourceByTitleAndBooktype(searchitem, restype);
+                return resourceRepository.findResourceByTitleIgnoreCaseContainingAndBooktype(searchitem, restype);
         }
         return null;
 
@@ -84,22 +91,23 @@ public class CustomerController {
         return reviewRepository.findReviewByBookidLike(bookid);
     }
 
+
     @RequestMapping(value = "/searchByAuthor/{author}", method = RequestMethod.GET)
     public @ResponseBody
     Iterable <Resource> searchByAuthor(@PathParam(value = "author") @PathVariable String author) {
-        return resourceRepository.findResourceByAuthorLike(author);
+        return resourceRepository.findResourceByAuthorIgnoreCaseContaining(author);
     }
 
     @RequestMapping(value = "/searchByTitle/{title}", method = RequestMethod.GET)
     public @ResponseBody
     Iterable <Resource> searchByTitle(@PathParam(value = "title") @PathVariable String title) {
-        return resourceRepository.findResourceByTitleLike(title);
+        return resourceRepository.findResourceByTitleIgnoreCaseContaining(title);
     }
 
     @RequestMapping(value = "/searchByPublisher/{publisher}", method = RequestMethod.GET)
     public @ResponseBody
     Iterable <Resource> searchByPublisher(@PathParam(value = "publisher") @PathVariable String publisher) {
-        return resourceRepository.findResourceByPublisherLike(publisher);
+        return resourceRepository.findResourceByPublisherIgnoreCaseContaining(publisher);
     }
 
     @RequestMapping(value = "/saveReview", method = RequestMethod.POST)
