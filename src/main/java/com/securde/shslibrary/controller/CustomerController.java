@@ -213,7 +213,7 @@ public class CustomerController {
             if(passwordChecker(password)){
                 u.setPassword(passwordEncoder.encode(password));
                 userRepository.save(u);
-                System.out.println(passwordEncoder.matches("b@nDiT",u.getPassword()));
+                System.out.println(passwordEncoder.matches(password,u.getPassword()));
                 return userRepository.findAll();
             }
 
