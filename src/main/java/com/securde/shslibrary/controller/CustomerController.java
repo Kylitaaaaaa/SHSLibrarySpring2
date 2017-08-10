@@ -79,7 +79,7 @@ public class CustomerController {
 
     @RequestMapping(value = "/canReview/{bookid}/{userid}", method = RequestMethod.GET)
     public int canReview(@PathParam(value = "bookid") @PathVariable int bookid,
-                       @PathParam(value = "userid") @PathVariable int userid) {
+                         @PathParam(value = "userid") @PathVariable int userid) {
         List <Resourcereservation> r = resourceReservationRepository.findResourcereservationByBookidAndUserid(bookid, userid);
         if(r.size() ==0)
             return 1;
@@ -115,12 +115,15 @@ public class CustomerController {
         reviewRepository.save(review);
     }
 
-    @RequestMapping(value = "/reserveResource/{bookid}/{reservationdate}/{returndate}/{status}/{userid}", method = RequestMethod.POST)
-    public Iterable <Resource> reserveResource(@PathParam(value = "bookid") @PathVariable int bookid,
-                                @PathParam(value = "reservationdate") @PathVariable String reservationdate,
-                                @PathParam(value = "returndate") @PathVariable String returndate,
-                                @PathParam(value = "status") @PathVariable int status,
-                                @PathParam(value = "userid") @PathVariable int userid) {
+    @RequestMapping(value = "/reserveResource/{bookid}/{reservationdate}/{returndate}/{status}/{userid}/{restype}/{options}/{searchitem}", method = RequestMethod.POST)
+    public Iterable<Resource> reserveResource(@PathParam(value = "bookid") @PathVariable int bookid,
+                                              @PathParam(value = "reservationdate") @PathVariable String reservationdate,
+                                              @PathParam(value = "returndate") @PathVariable String returndate,
+                                              @PathParam(value = "status") @PathVariable int status,
+                                              @PathParam(value = "userid") @PathVariable int userid,
+                                              @PathParam(value = "restype") @PathVariable int restype,
+                                              @PathParam(value = "options") @PathVariable int options,
+                                              @PathParam(value = "searchitem") @PathVariable String searchitem) {
 
         Resourcereservation r = new Resourcereservation();
         r.setBookid(bookid);
@@ -135,13 +138,70 @@ public class CustomerController {
         res.setStatus(status);
         resourceRepository.save(res);
 
+        if(restype != 1 && restype !=2 && restype !=3)
+            return resourceRepository.findAll();
+        else {
+
+            if (restype == 3) {
+                if (options == 0) {
+                    String searchitem2 = searchitem;
+                    String searchitem3 = searchitem;
+                    return resourceRepository.findResourceByAuthorIgnoreCaseContainingOrPublisherIgnoreCaseContainingOrTitleIgnoreCaseContaining(searchitem, searchitem2, searchitem3);
+                } else if (options == 1)
+                    return resourceRepository.findResourceByAuthorIgnoreCaseContaining(searchitem);
+                else if (options == 2)
+                    return resourceRepository.findResourceByPublisherIgnoreCaseContaining(searchitem);
+                else if (options == 3)
+                    return resourceRepository.findResourceByTitleIgnoreCaseContaining(searchitem);
+            } else {
+                if (options == 0) {
+                    String searchitem2 = searchitem;
+                    String searchitem3 = searchitem;
+                    return resourceRepository.findResourceByAuthorIgnoreCaseContainingOrPublisherIgnoreCaseContainingOrTitleIgnoreCaseContainingAndBooktype(searchitem, searchitem2, searchitem3, restype);
+                }
+                if (options == 1)
+                    return resourceRepository.findResourceByAuthorIgnoreCaseContainingAndBooktype(searchitem, restype);
+                else if (options == 2)
+                    return resourceRepository.findResourceByPublisherIgnoreCaseContainingAndBooktype(searchitem, restype);
+                else if (options == 3)
+                    return resourceRepository.findResourceByTitleIgnoreCaseContainingAndBooktype(searchitem, restype);
+            }
+        }
+        return null;
+
+
+
+    }
+
+    @RequestMapping(value = "/reserveResourceAll/{bookid}/{reservationdate}/{returndate}/{status}/{userid}", method = RequestMethod.POST)
+    public Iterable<Resource> reserveResourceAll(@PathParam(value = "bookid") @PathVariable int bookid,
+                                              @PathParam(value = "reservationdate") @PathVariable String reservationdate,
+                                              @PathParam(value = "returndate") @PathVariable String returndate,
+                                              @PathParam(value = "status") @PathVariable int status,
+                                              @PathParam(value = "userid") @PathVariable int userid) {
+
+        Resourcereservation r = new Resourcereservation();
+        r.setBookid(bookid);
+        r.setReservationdate(reservationdate);
+        r.setReturndate(returndate);
+        r.setStatus(status);
+        r.setUserid(userid);
+
+        resourceReservationRepository.save(r);
+
+        Resource res = resourceRepository.findResourceByBookidLike(bookid);
+        res.setStatus(status);
+        resourceRepository.save(res);
         return resourceRepository.findAll();
+
+
+
     }
 
 
     @RequestMapping(value = "/onSearchMR/{starttime}/{usagedateformat}", method = RequestMethod.GET)
     public @ResponseBody Iterable<Meetingroom> onSearchMR(@PathParam(value = "starttime") @PathVariable int starttime,
-                                                                     @PathParam(value = "usagedateformat") @PathVariable String usagedateformat){
+                                                          @PathParam(value = "usagedateformat") @PathVariable String usagedateformat){
 
         List<Meetingroom> mList = meetingRoomRepository.findAll();
         List<Meetingroomreservation> mrList = meetingRoomReservationRepository.findMeetingroomreservationByUsagedateAndStarttime(usagedateformat, starttime);
@@ -158,9 +218,9 @@ public class CustomerController {
 
     @RequestMapping(value = "/onReview/{reviewcontent}/{bookid}/{userid}/{currdate}", method = RequestMethod.POST)
     public List <Review> onReview(@PathParam(value = "reviewcontent") @PathVariable String reviewcontent,
-                                                        @PathParam(value = "bookid") @PathVariable int bookid,
-                                                        @PathParam(value = "userid") @PathVariable int userid,
-                                                        @PathParam(value = "currdate") @PathVariable String currdate){
+                                  @PathParam(value = "bookid") @PathVariable int bookid,
+                                  @PathParam(value = "userid") @PathVariable int userid,
+                                  @PathParam(value = "currdate") @PathVariable String currdate){
 
         Review r = new Review();
         r.setBookid(bookid);
@@ -175,11 +235,11 @@ public class CustomerController {
 
 
     @RequestMapping(value = "/reserveMR/{meetingroomid}/{userid}/{reservationdate}/{usagedate}/{starttime}", method = RequestMethod.POST)
-    public void reserveMR(@PathParam(value = "meetingroomid") @PathVariable int meetingroomid,
-                                @PathParam(value = "userid") @PathVariable int userid,
-                                @PathParam(value = "reservationdate") @PathVariable String reservationdate,
-                                @PathParam(value = "usagedate") @PathVariable String usagedate,
-                                @PathParam(value = "starttime") @PathVariable int starttime) {
+    public Iterable<Meetingroom> reserveMR(@PathParam(value = "meetingroomid") @PathVariable int meetingroomid,
+                                           @PathParam(value = "userid") @PathVariable int userid,
+                                           @PathParam(value = "reservationdate") @PathVariable String reservationdate,
+                                           @PathParam(value = "usagedate") @PathVariable String usagedate,
+                                           @PathParam(value = "starttime") @PathVariable int starttime) {
 
         Meetingroomreservation mr = new Meetingroomreservation();
         mr.setMrid(meetingroomid);
@@ -189,6 +249,19 @@ public class CustomerController {
         mr.setStarttime(starttime);
 
         meetingRoomReservationRepository.save(mr);
+
+        String usagedateformat = usagedate;
+
+        List<Meetingroom> mList = meetingRoomRepository.findAll();
+        List<Meetingroomreservation> mrList = meetingRoomReservationRepository.findMeetingroomreservationByUsagedateAndStarttime(usagedateformat, starttime);
+        List<Meetingroom> mList2 = new ArrayList<Meetingroom>();
+        for(int i=0; i<mList.size(); i++){
+            Meetingroomreservation mrrr = meetingRoomReservationRepository.findMeetingroomreservationByUsagedateAndStarttimeAndMrid(usagedateformat, starttime, mList.get(i).getMeetingroomid());
+            if(mrrr == null)
+                mList2.add(mList.get(i));
+        }
+
+        return mList2;
 
 
 

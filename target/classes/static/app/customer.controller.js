@@ -136,7 +136,15 @@
             var status = 1;
             var userid = 1;
 
-            var url = "/customer/reserveResource/" + bookid + "/" + reservationdate  + "/" + returndate + "/"  + status + "/" + userid;
+            var url = "/customer/reserveResource/" + bookid + "/" + reservationdate  + "/" + returndate + "/"  + status + "/" + userid + "/" + $scope.formModel.restype + "/" + $scope.formModel.options + "/" +$scope.formModel.searchitem;
+
+            if($scope.formModel.restype == null){
+                url = "/customer/reserveResourceAll/" + bookid + "/" + reservationdate  + "/" + returndate + "/"  + status + "/" + userid;
+                console.log("huh");
+            }
+
+
+            console.log("url " + url);
             $http.post(url).then(function (response) {
                 vm.resources = response.data;
             });
@@ -150,8 +158,10 @@
 
             var url = "/customer/reserveMR/" + meetingroomid + "/" + userid  + "/" + reservationdate + "/"  + usagedateformat + "/" + starttime;
             $http.post(url).then(function (response) {
-                vm.resources = response.data;
+                vm.availMR = response.data;
             });
+
+            console.log(vm.availMR);
         }
 
         function allAvailMR(searchdate) {
