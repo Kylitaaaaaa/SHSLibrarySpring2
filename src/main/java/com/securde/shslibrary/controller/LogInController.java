@@ -3,6 +3,7 @@ package com.securde.shslibrary.controller;
 import com.securde.shslibrary.model.User;
 import com.securde.shslibrary.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
@@ -15,6 +16,9 @@ import javax.websocket.server.PathParam;
 public class LogInController {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @RequestMapping(value = "/isExist/{idnumber}", method = RequestMethod.GET)
     public Boolean isExist(@PathParam(value = "idnumber") @PathVariable int idnumber) {
@@ -38,8 +42,8 @@ public class LogInController {
          return null;
         if(u != null) {
             if (u.getLockstatus() == 0) {
-                if (u.getPassword().equals(user.getPassword()))
-                    {
+                if (passwordEncoder.matches(user.getPassword(),u.getPassword()))
+                {
                         u.setLoginattempts(0);
                         userRepository.save(u);
                         return u;
