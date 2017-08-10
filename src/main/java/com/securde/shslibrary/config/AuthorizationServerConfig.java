@@ -60,25 +60,19 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-//        clients.jdbc(null)
-//                .withClient("sampleClientId")
-//                .authorizedGrantTypes("implicit")
-//                .scopes("read")
-//                .autoApprove(true)
-//                .and()
-//                .withClient("clientIdPassword")
-//                .secret("secret")
-//                .authorizedGrantTypes(
-//                        "password","authorization_code", "refresh_token")
-//                .scopes("read");
         clients.inMemory()
-                .withClient("service-account-1")
-                .secret("service-account-1-secret")
-                .authorizedGrantTypes("client_credentials")
-                .scopes("resource-server-read", "resource-server-write").and()
-                .withClient("gigy").secret("secret").accessTokenValiditySeconds(expiration)
-                .scopes("read", "write").authorizedGrantTypes("password", "refresh_token").resourceIds(RESOURCE_ID)
-                .authorities();
+                .withClient("customer").secret("secret1").accessTokenValiditySeconds(expiration)
+                .authorizedGrantTypes("password", "refresh_token").scopes("resource-server-read", "resource-server-write","CUSTOMER").resourceIds(RESOURCE_ID)
+                .and()
+                .withClient("libman").secret("secret2").accessTokenValiditySeconds(expiration)
+                .authorizedGrantTypes("password", "refresh_token").scopes("resource-server-read", "resource-server-write","LIBMAN").resourceIds(RESOURCE_ID)
+                .and()
+                .withClient("libstaff").secret("secret3").accessTokenValiditySeconds(expiration)
+                .authorizedGrantTypes("password", "refresh_token").scopes("resource-server-read", "resource-server-write","LIBSTAFF").resourceIds(RESOURCE_ID)
+                .and()
+                .withClient("admin").secret("secret4").accessTokenValiditySeconds(expiration)
+                .authorizedGrantTypes("password", "refresh_token").scopes("resource-server-read", "resource-server-write").resourceIds(RESOURCE_ID)
+                .authorities("admin");
     }
 
     @Override

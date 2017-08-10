@@ -29,7 +29,13 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/", "/home", "/register", "/login").permitAll();
-                //.antMatchers("/private/**", "/libstaff/**").authenticated();
+                .antMatchers("/home", "/register", "/login").permitAll()
+                //.antMatchers("/","/gen/**","/libman/**", "/libstaff/**", "/customer/**").authenticated()
+                .antMatchers("/","/gen/**","/libman/**", "/libstaff/**").authenticated()
+                .antMatchers("/gen/**").access("#oauth2.hasScope('ADMIN')")
+                .antMatchers("/libman/**").access("#oauth2.hasScope('LIBMAN')")
+                .antMatchers("/libstaff/**").access("#oauth2.hasScope('LIBSTAFF')")
+                //.antMatchers("/customer/**").access("#oauth2.hasScope('CUSTOMER')")
+        ;//.antMatchers("/customer/**");
     }
 }
