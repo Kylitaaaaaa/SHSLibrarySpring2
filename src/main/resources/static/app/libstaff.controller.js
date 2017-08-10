@@ -2,21 +2,22 @@
     'use strict:';
     angular
         .module('app', [])
-        .factory('$exceptionHandler', ['$injector', function($injector) {
-            return function(exception, cause) {
-                window.location.href = '/dashboard';
-            };
-        }])
+        // .factory('$exceptionHandler', ['$injector', function($injector) {
+        //     return function(exception, cause) {
+        //         window.location.href = '/dashboard';
+        //     };
+        // }])
         .controller('LibStaffController', LibStaffController);
 
 
 
-    LibStaffController.$inject = ['$scope','$http'];
-    function LibStaffController($scope, $http) {
+    LibStaffController.$inject = ['$scope','$http', '$filter'];
+    function LibStaffController($scope, $http, $filter) {
+        init();
         var vm = this;
         vm.resources = [];
         vm.resourceRes = [];
-        vm.mr = [];
+        vm.availMR = [];
         vm.currResource = null;
         vm.getAllResources = getAllResources;
         vm.removeResource = removeResource;
@@ -27,19 +28,32 @@
         $scope.onCreateRes = function(valid){
             if(valid){
                 var url = "/libstaff/createResource";
-                $http.post(url, $scope.formModel)
-                    .then(function success(response) {
-                        console.log("success");
-                    }, function error(response) {
-                        console.log("fail");
-                    });
+                $http.post(url, $scope.formModel).then(function (response) {
+                    vm.resources = response.data;
+                });
+
+
             }
             else{
                 console.log(":( not valid");
             }
         }
 
-        init();
+        $scope.onSearchMR = function(valid){
+            if(valid){
+                var usagedateformat = $filter("date")($scope.formModel.usagedate, 'yyyy-MM-dd');
+                console.log(usagedateformat);
+                var url = "/libstaff/onSearchMR/"+ $scope.formModel.starttime + "/" + usagedateformat;
+                $http.get(url).then(function (response) {
+                    vm.availMR = response.data;
+                });
+            }
+            else{
+                console.log(":( not valid");
+            }
+        }
+
+
         function init() {
             getAllResources();
         }

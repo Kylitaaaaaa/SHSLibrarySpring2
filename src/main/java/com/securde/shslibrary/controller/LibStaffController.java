@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -55,8 +57,7 @@ public class LibStaffController {
     }
 
     @RequestMapping(value = "/createResource", method = RequestMethod.POST)
-    public @ResponseBody
-    Iterable <Resource> createResource(@RequestBody Resource resource){
+    public @ResponseBody Iterable <Resource> createResource(@RequestBody Resource resource){
         resourceRepository.save(resource);
         return  resourceRepository.findAll();
     }
@@ -122,6 +123,21 @@ public class LibStaffController {
         return meetingRoomReservationRepository.findOne(resid);
     }
 
+    @RequestMapping(value = "/onSearchMR/{starttime}/{usagedateformat}", method = RequestMethod.GET)
+    public @ResponseBody Iterable<Meetingroom> onSearchMR(@PathParam(value = "starttime") @PathVariable int starttime,
+                                                          @PathParam(value = "usagedateformat") @PathVariable String usagedateformat){
+
+        List<Meetingroom> mList = meetingRoomRepository.findAll();
+        List<Meetingroomreservation> mrList = meetingRoomReservationRepository.findMeetingroomreservationByUsagedateAndStarttime(usagedateformat, starttime);
+        List<Meetingroom> mList2 = new ArrayList<Meetingroom>();
+        for(int i=0; i<mList.size(); i++){
+            Meetingroomreservation mrrr = meetingRoomReservationRepository.findMeetingroomreservationByUsagedateAndStarttimeAndMrid(usagedateformat, starttime, mList.get(i).getMeetingroomid());
+            if(mrrr == null)
+                mList2.add(mList.get(i));
+        }
+
+        return mList2;
+    }
 
 
 

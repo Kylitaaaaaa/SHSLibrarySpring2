@@ -140,11 +140,8 @@
 
             if($scope.formModel.restype == null){
                 url = "/customer/reserveResourceAll/" + bookid + "/" + reservationdate  + "/" + returndate + "/"  + status + "/" + userid;
-                console.log("huh");
             }
 
-
-            console.log("url " + url);
             $http.post(url).then(function (response) {
                 vm.resources = response.data;
             });

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Spring Boot Thymeleaf Hello World Example</title>
+    <title>SHS Library Library Staff</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
 
@@ -86,6 +86,33 @@
             </main>
         </div>
         <div class="col-sm-9" id = "availRoomTable">
+            <form method="post" ng-submit="onSearchMR(searchForm.$valid)"
+                  name = "searchForm">
+                <div class="form-group">
+                    <label for="selectTime">Start Time</label>
+                    <select class="form-control" ng-model="formModel.starttime" required="required" id="selectTime">
+                        <option value="8">8:00</option>
+                        <option value="9">9:00</option>
+                        <option value="10">10:00</option>
+                        <option value="11">11:00</option>
+                        <option value="12">12:00</option>
+                        <option value="13">13:00</option>
+                        <option value="14">14:00</option>
+                        <option value="15">15:00</option>
+                        <option value="16">16:00</option>
+                        <option value="17">17:00</option>
+                        <option value="18">18:00</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="selectDate">Usage Date</label>
+                    <input type="date" id="selectDate" name="input" ng-model="formModel.usagedate"
+                           placeholder="yyyy-MM-dd" min="2017-08-11" max="2020-12-31" required="required"/>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
             <main class="container pt-5">
                 <div class="card-block p-0">
                     <table class="table table-bordered table-definition mb-5">
@@ -93,12 +120,13 @@
                         <tr>
                             <th>Room ID</th>
                             <th>Room Name</th>
+
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="mr in vm.mr">
-                            <td ng-bind="mr.meetingroomid"/>
-                            <td ng-bind="mr.roomname"/>
+                        <tr ng-repeat="availMR in vm.availMR">
+                            <td ng-bind="availMR.meetingroomid"/>
+                            <td ng-bind="availMR.roomname"/>
                         </tr>
                         </tbody>
                     </table>
