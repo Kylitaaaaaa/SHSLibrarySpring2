@@ -20,7 +20,7 @@
 
 </head>
 <body ng-app="app" ng-controller="LogInController">
-<form method="post" ng-submit="onAttempt(newUserForm.$valid)"
+<form method="post" ng-submit="onAttempt2(newUserForm.$valid)"
       name = "newUserForm">
     <div class="form-group">
         <label for="IDNumber">ID Number</label>
@@ -31,8 +31,15 @@
         <label for="password">Password</label>
         <input type="password" class="form-control" id="password" placeholder="Enter Password" ng-model="formModel.password" autocomplete="off"/>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary" id = "here">Submit</button>
 </form>
 
+<script>
+
+    document.getElementById('here').addEventListener('click', function() {
+        alert('saklolo');
+    }, false);
+
+</script>
 </body>
 </html>

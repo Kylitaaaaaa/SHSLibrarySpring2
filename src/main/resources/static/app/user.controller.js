@@ -13,6 +13,8 @@
     GenController.$inject = ['$scope','$http'];
     function GenController($scope, $http) {
 
+
+
         var vm = this;
         vm.users = [];
         vm.getAll = getAll;

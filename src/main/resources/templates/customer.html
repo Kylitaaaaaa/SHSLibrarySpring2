@@ -257,7 +257,13 @@
                 <form method="post" ng-submit="onChangePass(newResForm2.$valid)"
                       name = "newResForm2">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Enter New Password" ng-model="formModel.password" autocomplete="off" required="required" />
+                        <input type="password" class="form-control" placeholder="Enter Old Password" ng-model="formModel.oldpassword" autocomplete="off" required="required" />
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" placeholder="Enter New Password" ng-model="formModel.password" autocomplete="off" required="required" />
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" placeholder="Confirm Password" ng-model="formModel.confirmpassword" autocomplete="off" required="required" />
                     </div>
                     <button type="submit" id="submitAddResource" class="btn btn-primary">Submit</button>
                 </form>

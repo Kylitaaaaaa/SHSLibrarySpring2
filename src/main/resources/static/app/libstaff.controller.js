@@ -11,7 +11,7 @@
 
 
 
-    LibStaffController.$inject = ['$scope','$http', '$filter'];
+    LibStaffController.$inject = ['$scope','$http', '$filter', '$rootScope'];
     function LibStaffController($scope, $http, $filter) {
         init();
         var vm = this;
@@ -28,8 +28,25 @@
         $scope.onCreateRes = function(valid){
             if(valid){
                 var url = "/libstaff/createResource";
-                $http.post(url, $scope.formModel).then(function (response) {
+                //$http.post(url, $scope.formModel).then(function (response) {
+                //    vm.resources = response.data;
+                //});
+
+                $http({
+                    method: 'POST',//or POST
+                    url: url,
+                    data: $scope.formModel,
+                    headers: {'Accept': 'application/json', 'Authorization': 'Bearer '+$rootScope.token,}
+                }).then(function successCallback(response) {
+                    console.log("here 2 success");
+                    console.log(response);
                     vm.resources = response.data;
+
+                }, function errorCallback(response) {
+                    console.log("here 2 fail");
+                    console.log(response);
+                    // called asynchronously if an error occurs
+                    // or server returns response with an error status.
                 });
 
 

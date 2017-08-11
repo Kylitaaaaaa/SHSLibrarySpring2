@@ -71,7 +71,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .authorizedGrantTypes("password", "refresh_token").scopes("resource-server-read", "resource-server-write","LIBSTAFF").resourceIds(RESOURCE_ID)
                 .and()
                 .withClient("admin").secret("secret4").accessTokenValiditySeconds(expiration)
-                .authorizedGrantTypes("password", "refresh_token").scopes("resource-server-read", "resource-server-write").resourceIds(RESOURCE_ID)
+                .authorizedGrantTypes("password", "refresh_token").scopes("resource-server-read", "resource-server-write", "ADMIN").resourceIds(RESOURCE_ID)
                 .authorities("admin");
     }
 

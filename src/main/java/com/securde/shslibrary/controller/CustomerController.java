@@ -241,16 +241,6 @@ public class CustomerController {
 
     }
 
-    @RequestMapping(value = "/onChangePass/{password}/{userid}", method = RequestMethod.POST)
-    public void onChangePass(@PathParam(value = "password") @PathVariable String password,
-                                  @PathParam(value = "userid") @PathVariable int userid){
-
-        User u = userRepository.findOne(userid);
-        u.setPassword(password);
-        userRepository.save(u);
-
-    }
-
 
     @RequestMapping(value = "/reserveMR/{meetingroomid}/{userid}/{reservationdate}/{usagedate}/{starttime}", method = RequestMethod.POST)
     public Iterable<Meetingroom> reserveMR(@PathParam(value = "meetingroomid") @PathVariable int meetingroomid,
@@ -287,23 +277,26 @@ public class CustomerController {
 
     }
 
-    @RequestMapping (value= "/passwordChange/{password}/{confirmpassword}/{idnumber}", method=RequestMethod.GET)
+    @RequestMapping (value= "/changePassword/{oldpassword}/{password}/{confirmpassword}/{idnumber}", method=RequestMethod.POST)
     public @ResponseBody
     Iterable <User> changePassword(
+            @PathParam(value="oldpassword") @PathVariable String oldpassword,
             @PathParam(value="password") @PathVariable String password,
             @PathParam(value="confirmpassword") @PathVariable String confirmpassword,
             @PathParam(value="idnumber") @PathVariable int idnumber){
         User u = userRepository.findUserByIdnumberLike(idnumber);
-        if(password.equals(confirmpassword)){
-            System.out.println(password+"  ===   "+confirmpassword);
+        if(passwordEncoder.matches(oldpassword,u.getPassword())){
+            if(password.equals(confirmpassword)){
+                System.out.println(password+"  ===   "+confirmpassword);
 
-            if(passwordChecker(password)){
-                u.setPassword(passwordEncoder.encode(password));
-                userRepository.save(u);
-                System.out.println(passwordEncoder.matches(password,u.getPassword()));
-                return userRepository.findAll();
+                if(passwordChecker(password)){
+                    u.setPassword(passwordEncoder.encode(password));
+                    userRepository.save(u);
+                    System.out.println(passwordEncoder.matches(password,u.getPassword()));
+                    return userRepository.findAll();
+                }
+
             }
-
         }
         return null;
     }
