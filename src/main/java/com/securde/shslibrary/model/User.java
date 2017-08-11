@@ -109,7 +109,6 @@ public class User implements UserDetails{
 
     @Override
     public String getUsername() {
-        System.out.println("jbjhrfejhrgejrjhvhjfhbfhj");
         return Integer.toString(idnumber);
     }
 
