@@ -51,8 +51,12 @@ public class GenController {
         RandomStringGenerator gen = new RandomStringGenerator();
         user.setPassword(passwordEncoder.encode(gen.genString(10)));
         user.setSecretanswer(passwordEncoder.encode(user.getSecretanswer()));
-
-
+        String birthday=user.getBirthday();
+        String month = birthday.substring(5,7);
+        String day = birthday.substring(8,10);
+        String year = birthday.substring(0,4);
+        String newBirthday= (month+"/"+day+"/"+year);
+        user.setBirthday(newBirthday);
         userRepository.save(user);
 
         return  userRepository.findAll();
