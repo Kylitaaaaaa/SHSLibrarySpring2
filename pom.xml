@@ -124,6 +124,8 @@
             <artifactId>hibernate-entitymanager</artifactId>
         </dependency>
 
+
+
     </dependencies>
 
     <properties>
