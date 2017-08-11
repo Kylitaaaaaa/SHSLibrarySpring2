@@ -4,6 +4,7 @@ import com.securde.shslibrary.model.RandomStringGenerator;
 import com.securde.shslibrary.model.User;
 import com.securde.shslibrary.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
@@ -13,6 +14,8 @@ import javax.websocket.server.PathParam;
 public class GenController {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
 
@@ -46,7 +49,9 @@ public class GenController {
     Iterable <User> create(@RequestBody User user){
 
         RandomStringGenerator gen = new RandomStringGenerator();
-        user.setPassword(gen.genString(10));
+        user.setPassword(passwordEncoder.encode(gen.genString(10)));
+        user.setSecretanswer(passwordEncoder.encode(user.getSecretanswer()));
+
 
         userRepository.save(user);
 
