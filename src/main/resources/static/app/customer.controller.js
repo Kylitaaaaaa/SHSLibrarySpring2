@@ -41,6 +41,21 @@
             }
         }
 
+        $scope.onChangePass = function(valid){
+            if(valid){
+                var userid = 1;
+                var url = "/customer/onChangePass/"+ $scope.formModel.password + "/" + userid;
+                console.log(url);
+                $http.post(url).then(function (response) {
+                });
+            }
+            else{
+                console.log(":( not valid");
+            }
+        }
+
+
+
         $scope.onSearchMR = function(valid){
             if(valid){
                 var usagedateformat = $filter("date")($scope.formModel.usagedate, 'yyyy-MM-dd');

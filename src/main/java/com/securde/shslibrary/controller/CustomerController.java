@@ -27,6 +27,9 @@ public class CustomerController {
     @Autowired
     ReviewRepository reviewRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
 
     @RequestMapping(value = "/onSearchResources/{restype}/{options}/{searchitem}", method = RequestMethod.GET)
     public @ResponseBody Iterable <Resource> onSearchResources(@PathParam(value = "restype") @PathVariable int restype,
@@ -232,6 +235,16 @@ public class CustomerController {
         reviewRepository.save(r);
 
         return reviewRepository.findReviewByBookidLike(bookid);
+
+    }
+
+    @RequestMapping(value = "/onChangePass/{password}/{userid}", method = RequestMethod.POST)
+    public void onChangePass(@PathParam(value = "password") @PathVariable String password,
+                                  @PathParam(value = "userid") @PathVariable int userid){
+
+        User u = userRepository.findOne(userid);
+        u.setPassword(password);
+        userRepository.save(u);
 
     }
 
