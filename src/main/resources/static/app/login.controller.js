@@ -11,13 +11,14 @@
 
 
 
-    LogInController.$inject = ['$scope','$http', '$filter', '$rootScope'];
-    function LogInController($scope, $http, $filter, $rootScope) {
+    LogInController.$inject = ['$scope','$http', '$filter', '$rootScope', '$window'];
+    function LogInController($scope, $http, $filter, $rootScope, $window) {
         var vm = this;
         vm.currUser = null;
 
         $scope.onAttempt2 = function(valid){
             var auth = null;
+            var page = null;
             console.log("hereee");
             if(valid){
                 var url = "/loginuser/specific/" + $scope.formModel.idnumber + "/" + $scope.formModel.password;
@@ -30,16 +31,19 @@
                 })
                     .then(function success(response) {
                         console.log("success");
-                        if(vm.currUser.usertype == 0)
+                        if(vm.currUser.usertype == 0){
                             auth = 'Basic ' + btoa("admin:secret4");
-                        else if(vm.currUser.usertype == 1)
+                        page = "admin";
+                        }
+                        else if(vm.currUser.usertype == 1){
                             auth = 'Basic ' + btoa("libman:secret2");
-                        else if(vm.currUser.usertype== 2)
+                    page = "libman";}
+                        else if(vm.currUser.usertype== 2){
                             auth = 'Basic ' + btoa("libstaff:secret3");
-                        else if(vm.currUser.usertype == 3)
-                            auth = 'Basic ' + btoa("student:secret1");
-                        else if(vm.currUser.usertype == 4)
-                            auth = 'Basic ' + btoa("professor:secret1");
+                        page="libstaff";}
+                        else if(vm.currUser.usertype == 3){
+                            auth = 'Basic ' + btoa("customer:secret1");
+                        page = "customer";}
 
                         console.log("auth: " + auth);
                         // console.log(response);
@@ -56,6 +60,11 @@
                             console.log("access token is: "+response.data["access_token"])
                             $rootScope.token = response.data["access_token"];
                             console.log("token: " + $rootScope.token);
+
+                            var redirectUrl = "/"+page+"?access_token="+$rootScope.token;
+                            console.log(redirectUrl);
+                            $window.location.href =redirectUrl;
+
 
                         }, function errorCallback(response) {
                             console.log("here 2 fail");

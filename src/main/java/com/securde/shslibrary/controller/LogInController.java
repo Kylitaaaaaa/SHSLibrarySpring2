@@ -32,7 +32,7 @@ public class LogInController {
     }
 
     @RequestMapping(value = "/specific/{idnumber}/{password}", method = RequestMethod.POST)
-    public User specific(@PathParam(value = "idnumber") @PathVariable int idnumber,
+    public @ResponseBody User specific(@PathParam(value = "idnumber") @PathVariable int idnumber,
                                         @PathParam(value = "password") @PathVariable String password){
         List<User> uList = userRepository.findAll();
         for(int i=0; i< uList.size(); i++)
