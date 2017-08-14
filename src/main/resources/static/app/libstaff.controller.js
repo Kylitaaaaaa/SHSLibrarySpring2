@@ -27,7 +27,7 @@
         $scope.formModel= {};
         $scope.onCreateRes = function(valid){
             if(valid){
-                var url = "/libstaff/createResource";
+                var url = "/libstaff/createResource"+"?access_token="+debug;
                 //$http.post(url, $scope.formModel).then(function (response) {
                 //    vm.resources = response.data;
                 //});
@@ -60,7 +60,7 @@
             if(valid){
                 var usagedateformat = $filter("date")($scope.formModel.usagedate, 'yyyy-MM-dd');
                 console.log(usagedateformat);
-                var url = "/libstaff/onSearchMR/"+ $scope.formModel.starttime + "/" + usagedateformat;
+                var url = "/libstaff/onSearchMR/"+ $scope.formModel.starttime + "/" + usagedateformat+"?access_token="+debug;
                 $http.get(url).then(function (response) {
                     vm.availMR = response.data;
                 });
@@ -76,7 +76,7 @@
         }
 
         function getAllResources() {
-            var url = "/libstaff/allResources";
+            var url = "/libstaff/allResources"+"?access_token="+debug;
             var adminsPromise = $http.get(url);
             adminsPromise.then(function(response){
                 vm.resources = response.data;
@@ -85,7 +85,7 @@
         }
 
         function getAllAvailMR() {
-            var url = "/libstaff/allAvailMR";
+            var url = "/libstaff/allAvailMR"+"?access_token="+debug;
             var adminsPromise = $http.get(url);
             adminsPromise.then(function (response) {
                 vm.mr = response.data;
@@ -93,7 +93,7 @@
         }
 
         function removeResource(resid) {
-            var url = "/libstaff/removeResource/" + resid;
+            var url = "/libstaff/removeResource/" + resid+"?access_token="+debug;
             $http.post(url).then(function (response) {
                 vm.resources = response.data;
             }).then(function success(response) {
@@ -104,7 +104,7 @@
         }
 
         function getCurrResource(resid) {
-            var url = "/libstaff/getCurrResource/" + resid;
+            var url = "/libstaff/getCurrResource/" + resid+"?access_token="+debug;
             var adminsPromise = $http.get(url);
             adminsPromise.then(function (response) {
                 vm.currResource = response.data;

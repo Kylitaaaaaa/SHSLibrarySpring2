@@ -30,7 +30,7 @@
 
         $scope.onSearchResources = function(valid){
             if(valid){
-                var url = "/customer/onSearchResources/"+ $scope.formModel.restype + "/" + $scope.formModel.options + "/" +$scope.formModel.searchitem;
+                var url = "/customer/onSearchResources/"+ $scope.formModel.restype + "/" + $scope.formModel.options + "/" +$scope.formModel.searchitem+"?access_token="+debug;
                 console.log(url);
                 $http.get(url).then(function (response) {
                     vm.resources = response.data;
@@ -44,7 +44,7 @@
         $scope.onChangePass = function(valid){
             if(valid){
                 var idnumber = 11429395;
-                var url = "/customer/onChangePass/"+ $scope.formModel.oldpassword + "/" + $scope.formModel.password + "/" + $scope.formModel.confirmpassword + "/" + idnumber;
+                var url = "/customer/onChangePass/"+ $scope.formModel.oldpassword + "/" + $scope.formModel.password + "/" + $scope.formModel.confirmpassword + "/" + idnumber+"?access_token="+debug;
                 console.log(url);
                 $http.post(url).then(function (response) {
                 });
@@ -60,7 +60,7 @@
             if(valid){
                 var usagedateformat = $filter("date")($scope.formModel.usagedate, 'yyyy-MM-dd');
                 console.log(usagedateformat);
-                var url = "/customer/onSearchMR/"+ $scope.formModel.starttime + "/" + usagedateformat;
+                var url = "/customer/onSearchMR/"+ $scope.formModel.starttime + "/" + usagedateformat+"?access_token="+debug;
                 $http.get(url).then(function (response) {
                     vm.availMR = response.data;
                 });
@@ -75,7 +75,7 @@
                 var currdate = $filter("date")(Date.now(), 'yyyy-MM-dd');
                 console.log(currdate);
                 var userid = 1;
-                var url = "/customer/onReview/"+ $scope.formModel.reviewcontent + "/" + vm.currResource.bookid + "/" + userid + "/" + currdate;
+                var url = "/customer/onReview/"+ $scope.formModel.reviewcontent + "/" + vm.currResource.bookid + "/" + userid + "/" + currdate+"?access_token="+debug;
                 $http.post(url, $scope.formModel).then(function (response) {
                     vm.review = response.data;
                 });
@@ -87,7 +87,7 @@
 
         $scope.saveReview = function(valid){
             if(valid){
-                var url = "/customer/saveReview";
+                var url = "/customer/saveReview"+"?access_token="+debug;
                 $scope.formModel.reviewdate = $filter("date")(Date.now(), 'yyyy-MM-dd');
                 $http.post(url, $scope.formModel)
                     .then(function success(response) {
@@ -104,7 +104,7 @@
 
         $scope.reserveMRRes = function(valid){
             if(valid){
-                var url = "/customer/reserveMRRes";
+                var url = "/customer/reserveMRRes"+"?access_token="+debug;
                 $scope.formModel.resdate = $filter("date")(Date.now(), 'yyyy-MM-dd');
                 $http.post(url, $scope.formModel).then(function (response) {
                     vm.review = response.data;
@@ -122,7 +122,7 @@
         }
 
         function searchByAuthor(author) {
-            var url = "/customer/searchByAuthor/" + author;
+            var url = "/customer/searchByAuthor/" + author+"?access_token="+debug;
             var adminsPromise = $http.get(url);
             $http.post(url).then(function (response) {
                 vm.resources = response.data;
@@ -130,7 +130,7 @@
         }
 
         function searchByTitle(title) {
-            var url = "/customer/searchByTitle/" + title;
+            var url = "/customer/searchByTitle/" + title+"?access_token="+debug;
             var adminsPromise = $http.get(url);
             $http.post(url).then(function (response) {
                 vm.resources = response.data;
@@ -138,7 +138,7 @@
         }
 
         function searchByPublisher(publisher) {
-            var url = "/customer/searchByPublisher/" + publisher;
+            var url = "/customer/searchByPublisher/" + publisher+"?access_token="+debug;
             var adminsPromise = $http.get(url);
             $http.post(url).then(function (response) {
                 vm.resources = response.data;
@@ -162,10 +162,10 @@
             var status = 1;
             var userid = 1;
 
-            var url = "/customer/reserveResource/" + bookid + "/" + reservationdate  + "/" + returndate + "/"  + status + "/" + userid + "/" + $scope.formModel.restype + "/" + $scope.formModel.options + "/" +$scope.formModel.searchitem;
+            var url = "/customer/reserveResource/" + bookid + "/" + reservationdate  + "/" + returndate + "/"  + status + "/" + userid + "/" + $scope.formModel.restype + "/" + $scope.formModel.options + "/" +$scope.formModel.searchitem+"?access_token="+debug;
 
             if($scope.formModel.restype == null){
-                url = "/customer/reserveResourceAll/" + bookid + "/" + reservationdate  + "/" + returndate + "/"  + status + "/" + userid;
+                url = "/customer/reserveResourceAll/" + bookid + "/" + reservationdate  + "/" + returndate + "/"  + status + "/" + userid+"?access_token="+debug;
             }
 
             $http.post(url).then(function (response) {
@@ -179,7 +179,7 @@
             var reservationdate = $filter("date")(Date.now(), 'yyyy-MM-dd');
             var userid = 1;
 
-            var url = "/customer/reserveMR/" + meetingroomid + "/" + userid  + "/" + reservationdate + "/"  + usagedateformat + "/" + starttime;
+            var url = "/customer/reserveMR/" + meetingroomid + "/" + userid  + "/" + reservationdate + "/"  + usagedateformat + "/" + starttime+"?access_token="+debug;
             $http.post(url).then(function (response) {
                 vm.availMR = response.data;
             });
@@ -188,7 +188,7 @@
         }
 
         function allAvailMR(searchdate) {
-            var url = "/customer/allAvailMR/" + searchdate;
+            var url = "/customer/allAvailMR/" + searchdate+"?access_token="+debug;
             var adminsPromise = $http.get(url);
             $http.get(url).then(function (response) {
                 vm.mr = response.data;
@@ -196,33 +196,33 @@
         }
 
         function getCurrResource(bookid) {
-            var url = "/customer/getCurrResource/" + bookid;
+            var url = "/customer/getCurrResource/" + bookid+"?access_token="+debug;
             var adminsPromise = $http.get(url);
             adminsPromise.then(function(response){
                 vm.currResource = response.data;
             });
         }
         function viewCurrResource(bookid) {
-            var url = "/customer/getCurrResource/" + bookid;
+            var url = "/customer/getCurrResource/" + bookid+"?access_token="+debug;
             var adminsPromise = $http.get(url);
             adminsPromise.then(function(response){
                 vm.currResource = response.data;
             });
 
-            url = "/customer/getReviewCurrResource/" + bookid;
+            url = "/customer/getReviewCurrResource/" + bookid+"?access_token="+debug;
             $http.get(url).then(function(response){
                 vm.review = response.data;
             });
 
             var userid = 1;
-            url = "/customer/canReview/" + bookid + "/" + userid;
+            url = "/customer/canReview/" + bookid + "/" + userid+"?access_token="+debug;
             $http.get(url).then(function(response){
                 vm.canreview = response.data;
             });
         }
 
         function getAllResources() {
-            var url = "/customer/getAllResources";
+            var url = "/customer/getAllResources"+"?access_token="+debug;
             var adminsPromise = $http.get(url);
             adminsPromise.then(function(response){
                 vm.resources = response.data;

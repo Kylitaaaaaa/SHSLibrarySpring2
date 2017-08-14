@@ -11,8 +11,8 @@
 
 
 
-    LibManController.$inject = ['$scope','$http', '$filter'];
-    function LibManController($scope, $http, $filter) {
+    LibManController.$inject = ['$scope','$http', '$filter', '$rootScope'];
+    function LibManController($scope, $http, $filter, $rootScope) {
         init();
         var vm = this;
         vm.resources = [];
@@ -30,10 +30,11 @@
         vm.getCurrResourceRes = getCurrResourceRes;
         vm.getCurrRoomRes = getCurrRoomRes;
 
+
         $scope.formModel= {};
         $scope.onCreateRes = function(valid){
             if(valid){
-                var url = "/libman/createResource";
+                var url = "/libman/createResource?access_token="+debug;
                 console.log(url);
                 $http.post(url, $scope.formModel).then(function (response) {
                     vm.resources = response.data;
@@ -48,7 +49,7 @@
             if(valid){
                 var usagedateformat = $filter("date")($scope.formModel.usagedate, 'yyyy-MM-dd');
                 console.log(usagedateformat);
-                var url = "/libstaff/onSearchMR/"+ $scope.formModel.starttime + "/" + usagedateformat;
+                var url = "/libstaff/onSearchMR/"+ $scope.formModel.starttime + "/" + usagedateformat+"?access_token="+debug;
                 $http.get(url).then(function (response) {
                     vm.availMR = response.data;
                 });
@@ -60,7 +61,7 @@
 
         $scope.onSaveResourceRes = function(valid){
             if(valid){
-                var url = "/libman/saveResourceRes";
+                var url = "/libman/saveResourceRes"+"?access_token="+debug;
                 $scope.formModel.resid = vm.currResourceRes.resid;
                 $scope.formModel.bookid = vm.currResourceRes.bookid;
                 console.log("book " + vm.currResourceRes.bookid);
@@ -76,7 +77,7 @@
 
         $scope.onSaveRoomRes = function(valid){
             if(valid){
-                var url = "/libman/saveRoomRes";
+                var url = "/libman/saveRoomRes"+"?access_token="+debug;
                 var temp = $filter("date")($scope.formModel.usagedate, 'yyyy-MM-dd');
                 $scope.formModel.usagedate = temp;
                 $http.post(url, $scope.formModel).then(function (response) {
@@ -98,16 +99,16 @@
         }
 
         function getAllResources() {
-            var url = "/libman/allResources";
-            var adminsPromise = $http.get(url);
-            adminsPromise.then(function(response){
-                vm.resources = response.data;
+            var url = "/libman/allResources"+"?access_token="+debug;
+            //var adminsPromise = $http.get(url);
+            //adminsPromise.then(function(response){
+            //    vm.resources = response.data;
                 //vm.currResource = response.data;
-            });
+            //});
         }
 
         function getAllResourcesRes() {
-            var url = "/libman/allResourcesRes";
+            var url = "/libman/allResourcesRes"+"?access_token="+debug;
             var adminsPromise = $http.get(url);
             adminsPromise.then(function(response){
                 vm.resourceRes = response.data;
@@ -115,7 +116,7 @@
         }
 
         function getAllMRRes() {
-            var url = "/libman/allMRRes";
+            var url = "/libman/allMRRes"+"?access_token="+debug;
             var adminsPromise = $http.get(url);
             adminsPromise.then(function(response){
                 vm.mrRes = response.data;
@@ -123,7 +124,7 @@
         }
 
         function removeResource(resid) {
-            var url = "/libman/removeResource/" + resid;
+            var url = "/libman/removeResource/" + resid+"?access_token="+debug;
             $http.post(url).then(function (response) {
                 vm.resources = response.data;
             }).then(function success(response) {
@@ -134,7 +135,7 @@
         }
 
         function removeResourceRes(resid) {
-            var url = "/libman/removeResourceRes/" + resid;
+            var url = "/libman/removeResourceRes/" + resid+"?access_token="+debug;
             $http.post(url).then(function (response) {
                 vm.resourceRes = response.data;
             }).then(function success(response) {
@@ -145,7 +146,7 @@
         }
 
         function removeResourceMRRes(resid) {
-            var url = "/libman/removeResourceMRRes/" + resid;
+            var url = "/libman/removeResourceMRRes/" + resid+"?access_token="+debug;
             $http.post(url).then(function (response) {
                 vm.mrRes = response.data;
             }).then(function success(response) {
@@ -156,7 +157,7 @@
         }
 
         function getCurrResource(resid) {
-            var url = "/libman/getCurrResource/" + resid;
+            var url = "/libman/getCurrResource/" + resid+"?access_token="+debug;
             var adminsPromise = $http.get(url);
             adminsPromise.then(function (response) {
                 vm.currResource = response.data;
@@ -165,7 +166,7 @@
         }
 
         function getCurrResourceRes(resid) {
-            var url = "/libman/getCurrResourceRes/" + resid;
+            var url = "/libman/getCurrResourceRes/" + resid+"?access_token="+debug;
             var adminsPromise = $http.get(url);
             adminsPromise.then(function (response) {
                 vm.currResourceRes = response.data;
@@ -174,7 +175,7 @@
         }
 
         function getCurrRoomRes(resid) {
-            var url = "/libman/getCurrRoomRes/" + resid;
+            var url = "/libman/getCurrRoomRes/" + resid+"?access_token="+debug;
             var adminsPromise = $http.get(url);
             adminsPromise.then(function (response) {
                 $scope.formModel = response.data;

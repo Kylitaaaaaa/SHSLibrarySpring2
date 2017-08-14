@@ -3,9 +3,11 @@ package com.securde.shslibrary.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -23,6 +25,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
@@ -41,9 +45,6 @@ import javax.sql.DataSource;
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter{
 
     public static final String RESOURCE_ID = "shslibrary_v1";
-
-    @Autowired
-    private Environment environment;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -67,9 +68,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .checkTokenAccess("isAuthenticated()");
     }
 
+
+
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory()
+        clients.jdbc(tokenDataSource)
                 .withClient("customer").secret("secret1").accessTokenValiditySeconds(expiration)
                 .authorizedGrantTypes("password", "refresh_token").scopes("resource-server-read", "resource-server-write","CUSTOMER").resourceIds(RESOURCE_ID)
                 .and()
@@ -88,24 +91,39 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         //.authenticationManager(authenticationManager);
         endpoints.tokenStore(tokenStore())
-                .tokenEnhancer(jwtTokenEnhancer())
                 .authenticationManager(authenticationManager);
-        endpoints.userDetailsService(userDetailsService);
+       // endpoints.userDetailsService(userDetailsService);
     }
+
+
+    @Value("${spring.datasource.driverClassName}")
+    private String oauthClass;
+
+    @Value("${spring.datasource.url}")
+    private String oauthUrl;
+
+    private DataSource tokenDataSource;
 
     @Bean
     public TokenStore tokenStore() {
-        return new JwtTokenStore(jwtTokenEnhancer());
+        tokenDataSource = DataSourceBuilder.create()
+                .driverClassName(oauthClass)
+                .username("root")
+                .password("")
+                .url(oauthUrl)
+                .build();
+        return new JdbcTokenStore(tokenDataSource);
     }
 
     @Bean
-    protected JwtAccessTokenConverter jwtTokenEnhancer() {
-        String pwd = environment.getProperty("keystore.password");
-        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(
-                new ClassPathResource("jwt.jks"),
-                pwd.toCharArray());
-        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setKeyPair(keyStoreKeyFactory.getKeyPair("jwt"));
-        return converter;
+    @Primary
+    public DefaultTokenServices tokenServices() {
+        DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
+        defaultTokenServices.setTokenStore(tokenStore());
+        defaultTokenServices.setSupportRefreshToken(true);
+        return defaultTokenServices;
     }
+
+
+
 }

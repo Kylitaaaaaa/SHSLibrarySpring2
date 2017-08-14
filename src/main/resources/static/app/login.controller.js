@@ -11,10 +11,12 @@
 
 
 
-    LogInController.$inject = ['$scope','$http', '$filter', '$rootScope', '$window'];
-    function LogInController($scope, $http, $filter, $rootScope, $window) {
+    LogInController.$inject = ['$scope','$http', '$filter', '$window', '$rootScope'];
+    function LogInController($scope, $http, $filter, $window, $rootScope) {
         var vm = this;
         vm.currUser = null;
+
+
 
         $scope.onAttempt2 = function(valid){
             var auth = null;
@@ -55,32 +57,25 @@
                             data:"grant_type=password&username="+$scope.formModel.idnumber+"&password="+ $scope.formModel.password,
                             headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': auth }
                         }).then(function successCallback(response) {
-                            console.log("here 2 success");
-                            console.log(response);
-                            console.log("access token is: "+response.data["access_token"])
-                            $rootScope.token = response.data["access_token"];
-                            console.log("token: " + $rootScope.token);
+                            debug = response.data["access_token"];
 
-                            var redirectUrl = "/"+page+"?access_token="+$rootScope.token;
-                            console.log(redirectUrl);
-                            $window.location.href =redirectUrl;
+                            var redirectUrl = "http://localhost:8080/"+page;//+"?access_token="+debug;
+                            $http({method: 'GET', url: redirectUrl, headers: {
+                                'Authorization': 'Bearer '+debug}
+                            });
 
 
                         }, function errorCallback(response) {
-                            console.log("here 2 fail");
-                            console.log(response);
                             // called asynchronously if an error occurs
                             // or server returns response with an error status.
                         });
                     }, function error(response) {
-                        console.log("fail");
                     });
 
             }
             else{
                 console.log(":( not valid");
             }
-
 /*
             if(vm.currUser != null){
 

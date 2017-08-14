@@ -16,13 +16,6 @@ import java.security.Principal;
 @RequestMapping("/")
 public class ViewController {
 
-    @RequestMapping("/user")
-    public Principal user(Principal user) {
-        System.out.println("AS /user has been called");
-        System.out.println("user info: "+user.toString());
-        return user;
-    }
-
     @RequestMapping("/login")
     public String login (Model model){
         return "login";
