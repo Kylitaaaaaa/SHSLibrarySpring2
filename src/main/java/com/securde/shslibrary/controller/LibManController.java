@@ -155,30 +155,29 @@ public class LibManController {
 
 
 
-        Row headerSheet1=sheet1.createRow(1);
-        Cell headerCell1Sheet1= headerSheet1.createCell(1);
-        Cell headerCell2Sheet1= headerSheet1.createCell(2);
-        Cell headerCell3Sheet1= headerSheet1.createCell(3);
-        Cell headerCell4Sheet1= headerSheet1.createCell(4);
-        Cell headerCell5Sheet1= headerSheet1.createCell(5);
-        Cell headerCell6Sheet1= headerSheet1.createCell(6);
-        Cell headerCell7Sheet1= headerSheet1.createCell(7);
+        Row headerSheet1=sheet1.createRow(0);
+        Cell headerCell1Sheet1= headerSheet1.createCell(0);
+        Cell headerCell2Sheet1= headerSheet1.createCell(1);
+        Cell headerCell3Sheet1= headerSheet1.createCell(2);
+        Cell headerCell4Sheet1= headerSheet1.createCell(3);
+        Cell headerCell5Sheet1= headerSheet1.createCell(4);
+        Cell headerCell6Sheet1= headerSheet1.createCell(5);
+        Cell headerCell7Sheet1= headerSheet1.createCell(6);
         headerCell1Sheet1.setCellValue("reservationid");
         headerCell2Sheet1.setCellValue("bookid");
         headerCell3Sheet1.setCellValue("userid");
         headerCell4Sheet1.setCellValue("reservationdate");
-        headerCell5Sheet1.setCellValue("borrowdate");
-        headerCell6Sheet1.setCellValue("returndate");
-        headerCell7Sheet1.setCellValue("status");
+        headerCell5Sheet1.setCellValue("returndate");
+        headerCell6Sheet1.setCellValue("status");
 
 
-        Row headerSheet2=sheet2.createRow(1);
-        Cell headerCell1Sheet2= headerSheet1.createCell(1);
-        Cell headerCell2Sheet2= headerSheet1.createCell(2);
-        Cell headerCell3Sheet2= headerSheet1.createCell(3);
-        Cell headerCell4Sheet2= headerSheet1.createCell(4);
-        Cell headerCell5Sheet2= headerSheet1.createCell(5);
-        Cell headerCell6Sheet2= headerSheet1.createCell(6);
+        Row headerSheet2=sheet2.createRow(0);
+        Cell headerCell1Sheet2= headerSheet2.createCell(0);
+        Cell headerCell2Sheet2= headerSheet2.createCell(1);
+        Cell headerCell3Sheet2= headerSheet2.createCell(2);
+        Cell headerCell4Sheet2= headerSheet2.createCell(3);
+        Cell headerCell5Sheet2= headerSheet2.createCell(4);
+        Cell headerCell6Sheet2= headerSheet2.createCell(5);
         headerCell1Sheet2.setCellValue("meetingroomreservationid");
         headerCell2Sheet2.setCellValue("meetingroomid");
         headerCell3Sheet2.setCellValue("reservationdate");
@@ -200,11 +199,9 @@ public class LibManController {
             Cell cell4 = row.createCell(colNum++);
             cell4.setCellValue(resourceReservationsList.get(i).getReservationdate());
             Cell cell5 = row.createCell(colNum++);
-            cell5.setCellValue(resourceReservationsList.get(i).getBorrowdate());
+            cell5.setCellValue(resourceReservationsList.get(i).getReturndate());
             Cell cell6 = row.createCell(colNum++);
-            cell6.setCellValue(resourceReservationsList.get(i).getReturndate());
-            Cell cell7= row.createCell(colNum++);
-            cell7.setCellValue(resourceReservationsList.get(i).getStatus());
+            cell6.setCellValue(resourceReservationsList.get(i).getStatus());
 
         }
 
@@ -230,7 +227,8 @@ public class LibManController {
 
 
         try {
-            FileOutputStream outputStream = new FileOutputStream("Reservation");
+            System.out.println("WRITING FILES!!!");
+            FileOutputStream outputStream = new FileOutputStream("C:/Users/DELL-PC/Desktop/SECURDE/SHSLibrarySpring/RESERVATION.xlsx");
             workbook.write(outputStream);
             workbook.close();
         } catch (FileNotFoundException e) {
