@@ -38,4 +38,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
                 //.antMatchers("/customer/**").access("#oauth2.hasScope('CUSTOMER')")
         ;//.antMatchers("/customer/**");
     }
+
+
 }
